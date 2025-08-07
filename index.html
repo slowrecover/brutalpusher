@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brutal Pusher - Break Your Procrastination</title>
+    <meta name="description" content="Stop making excuses. Get brutally honest feedback and actionable steps to beat procrastination. No sugar-coating, just results.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #000;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.6;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            border-bottom: 1px solid #222;
+        }
+        
+        h1 {
+            font-size: 36px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            color: #ff6b6b;
+        }
+        
+        .tagline {
+            color: #ccc;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .main-container {
+            flex: 1;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            width: 100%;
+        }
+        
+        .input-section {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .input-prompt {
+            font-size: 20px;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+        
+        input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #333;
+            color: #fff;
+            font-size: 18px;
+            padding: 15px 0;
+            outline: none;
+            transition: border-color 0.3s;
+            text-align: center;
+        }
+        
+        input:focus {
+            border-bottom-color: #ff6b6b;
+        }
+        
+        input::placeholder {
+            color: #555;
+            font-style: italic;
+        }
+        
+        .hint {
+            color: #666;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        .response {
+            margin-top: 40px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+        
+        .response.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .intro {
+            color: #ff6b6b;
+            font-size: 20px;
+            margin-bottom: 25px;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+        
+        .steps {
+            margin: 30px 0;
+            background: #111;
+            padding: 25px;
+            border-left: 4px solid #ff6b6b;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .steps-title {
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .step {
+            margin: 15px 0;
+            padding: 10px 0;
+            display: flex;
+            align-items: flex-start;
+            font-size: 16px;
+        }
+        
+        .step-number {
+            background: #ff6b6b;
+            color: #000;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        .step-text {
+            flex: 1;
+        }
+        
+        .outro {
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+            white-space: pre-line;
+            margin-top: 30px;
+            text-align: center;
+            line-height: 1.5;
+        }
+        
+        .ascii {
+            font-family: "SF Mono", "Monaco", monospace;
+            margin: 25px 0;
+            font-size: 12px;
+            line-height: 1.1;
+            color: #666;
+            text-align: center;
+            white-space: pre;
+        }
+        
+        .examples {
+            text-align: center;
+            margin-top: 30px;
+            color: #444;
+            font-size: 13px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid #222;
+            color: #666;
+            font-size: 12px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-container { padding: 20px; }
+            h1 { font-size: 28px; }
+            .input-prompt { font-size: 18px; }
+            input { font-size: 16px; }
+            .intro { font-size: 18px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>BRUTAL PUSHER</h1>
+        <div class="tagline">Break Your Procrastination with Tough Love</div>
+        <div class="subtitle">No excuses. No sugar-coating. Just results.</div>
+    </div>
+    
+    <div class="main-container">
+        <div class="input-section">
+            <div class="input-prompt">What have you been putting off?</div>
+            <input type="text" 
+                   id="taskInput" 
+                   placeholder="I want to lose weight..."
+                   autocomplete="off">
+            <div class="hint">Press Enter to get brutally honest feedback</div>
+        </div>
+        
+        <div id="response" class="response"></div>
+        
+        <div class="examples">
+            Try: "lose weight" • "learn programming" • "start a business" • "wake up early" • "quit social media"
+        </div>
+    </div>
+    
+    <div class="footer">
+        Made for procrastinators, by a procrastinator • No BS, just action
+    </div>
+
+    <script>
+        const responses = {
+            'weight': {
+                intro: "Lose weight? How long have you been saying that? 6 months? A year? Let me guess - you've already bought workout clothes that are collecting dust.",
+                steps: [
+                    "Stand up RIGHT NOW",
+                    "Do 10 push-ups (yes, even if they're terrible)",
+                    "Come back and check this box: ☐"
+                ],
+                outro: "Stop planning the perfect workout routine.\nStop researching the perfect diet.\nJust do 10 push-ups.\nNOW.",
+                ascii: `     o
+    /|\\
+    / \\  ← GET MOVING!`
+            },
+            'learn': {
+                intro: "Learn something new? Your bookmarks folder is probably overflowing with \"courses to take later.\" How's that working out for you?",
+                steps: [
+                    "Close this tab after reading",
+                    "Open ONE learning resource",
+                    "Study for exactly 15 minutes"
+                ],
+                outro: "Stop collecting courses.\nStop planning the \"perfect\" learning path.\nJust start.\n15 minutes.\nGO.",
+                ascii: `     o
+    /|\\  
+   _/ \\  ← LEARN NOW!`
+            },
+            'business': {
+                intro: "Start a business? Let me guess - you're still \"researching\" and \"planning\" while your competition is out there making money and mistakes.",
+                steps: [
+                    "Write down ONE simple business idea",
+                    "Talk to ONE potential customer today",
+                    "Stop reading about entrepreneurship"
+                ],
+                outro: "Perfect business plans don't exist.\nPerfect timing doesn't exist.\nWhat exists is TODAY.\nStart talking to customers.",
+                ascii: `     💡
+     o
+    /|\\  ← BUILD IT!
+    / \\`
+            },
+            'early': {
+                intro: "Wake up early? Your alarm clock must hate you by now. How many times have you hit snooze this week?",
+                steps: [
+                    "Set alarm for 30 minutes earlier (not 2 hours)",
+                    "Put phone across the room TONIGHT",
+                    "No negotiation with yourself tomorrow"
+                ],
+                outro: "Stop setting impossible goals.\nStop the 5 AM fantasy.\nStart with 30 minutes earlier.\nTonight.",
+                ascii: `    ⏰
+     o     WAKE UP!
+    /|\\  
+    / \\`
+            },
+            'social': {
+                intro: "Quit social media? You're probably going to check Instagram right after reading this. The irony is beautiful.",
+                steps: [
+                    "Delete ONE social app right now",
+                    "Put your phone in another room",
+                    "Do something else for 1 hour"
+                ],
+                outro: "Don't delete everything at once.\nYou'll just reinstall it.\nStart with ONE app.\nDelete it NOW.",
+                ascii: `    📱
+     X     GONE!
+     o
+    /|\\`
+            },
+            'exercise': {
+                intro: "Exercise? Your gym membership is basically a monthly donation at this point. When was the last time you actually went?",
+                steps: [
+                    "Put on workout clothes NOW",
+                    "Do 10 minutes of ANY movement",
+                    "Don't think, just move"
+                ],
+                outro: "Stop planning the perfect routine.\nStop waiting for motivation.\nMove your body for 10 minutes.\nSTART.",
+                ascii: `     o
+    /|\\  💪
+    / \\  ← MOVE!`
+            },
+            'default': {
+                intro: "Another grand plan? Another \"life-changing\" goal? How many times have you started and quit this exact same thing?",
+                steps: [
+                    "Cut your goal down to 10% of what you planned",
+                    "Find the smallest possible first step",
+                    "Do that step in the next 5 minutes"
+                ],
+                outro: "Stop thinking big.\nStart thinking SMALL.\nMicro-steps beat mega-plans.\nGO.",
+                ascii: `     o
+    /|\\  
+    / \\  ← JUST START!`
+            }
+        };
+
+        function getResponse(input) {
+            const text = input.toLowerCase().trim();
+            
+            if (text.includes('weight') || text.includes('lose') || text.includes('fat') || text.includes('diet') || text.includes('fitness')) {
+                return responses['weight'];
+            }
+            if (text.includes('learn') || text.includes('study') || text.includes('course') || text.includes('skill') || text.includes('programming') || text.includes('code')) {
+                return responses['learn'];
+            }
+            if (text.includes('business') || text.includes('startup') || text.includes('company') || text.includes('entrepreneur')) {
+                return responses['business'];
+            }
+            if (text.includes('early') || text.includes('wake') || text.includes('morning') || text.includes('sleep')) {
+                return responses['early'];
+            }
+            if (text.includes('social') || text.includes('phone') || text.includes('instagram') || text.includes('facebook') || text.includes('twitter') || text.includes('tiktok')) {
+                return responses['social'];
+            }
+            if (text.includes('exercise') || text.includes('workout') || text.includes('gym') || text.includes('run') || text.includes('fit')) {
+                return responses['exercise'];
+            }
+            
+            return responses['default'];
+        }
+
+        function displayResponse(response) {
+            const responseDiv = document.getElementById('response');
+            
+            let html = `<div class="intro">${response.intro}</div>`;
+            html += '<div class="steps">';
+            html += '<div class="steps-title">Your Action Plan:</div>';
+            response.steps.forEach((step, i) => {
+                html += `<div class="step">
+                    <div class="step-number">${i + 1}</div>
+                    <div class="step-text">${step}</div>
+                </div>`;
+            });
+            html += '</div>';
+            html += `<div class="outro">${response.outro}</div>`;
+            if (response.ascii) {
+                html += `<pre class="ascii">${response.ascii}</pre>`;
+            }
+            
+            responseDiv.innerHTML = html;
+            responseDiv.classList.add('show');
+        }
+
+        document.getElementById('taskInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && this.value.trim()) {
+                const response = getResponse(this.value);
+                displayResponse(response);
+                this.value = '';
+                
+                // Scroll to response
+                setTimeout(() => {
+                    document.getElementById('response').scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }, 100);
+            }
+        });
+
+        // Focus input on load
+        window.onload = () => {
+            document.getElementById('taskInput').focus();
+        };
+    </script>
+</body>
+</html>
