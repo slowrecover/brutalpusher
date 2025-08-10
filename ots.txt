@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://brutal-pusher.vercel.app/sitemap.xml
