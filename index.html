@@ -7,7 +7,7 @@
     
     <!-- Open Graph Tags -->
     <meta property="og:title" content="Brutal Pusher - Stop Procrastinating NOW">
-    <meta property="og:description" content="Your savage friend who actually makes you get shit done">
+    <meta property="og:description" content="Your savage AI friend who actually makes you get shit done">
     <meta property="og:url" content="https://brutalpusher.vercel.app">
     <meta property="og:type" content="website">
     
@@ -19,11 +19,10 @@
       gtag('js', new Date());
       gtag('config', 'G-P009BV8WW7');
     </script>
-    <!-- Google Analytics 结束 -->
     
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Stop procrastinating with Brutal Pusher - The only productivity tool that doesn't baby you. Get brutal honesty about your procrastination habits.">
-    <meta name="keywords" content="procrastination, productivity, brutal pusher, time management, stop procrastinating, tough love, anti-procrastination tool">
+    <meta name="description" content="Stop procrastinating with Brutal Pusher - The only AI productivity tool that doesn't baby you. Get brutal honesty about your procrastination habits.">
+    <meta name="keywords" content="procrastination, productivity, brutal pusher, AI coach, time management, stop procrastinating, tough love, anti-procrastination tool">
     <meta name="author" content="Brutal Pusher">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://brutalpusher.vercel.app">
@@ -36,7 +35,7 @@
     <!-- Twitter Card Tags -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Brutal Pusher - Stop Procrastinating NOW">
-    <meta name="twitter:description" content="Your savage friend who actually makes you get shit done">
+    <meta name="twitter:description" content="Your savage AI friend who actually makes you get shit done">
     <meta name="twitter:url" content="https://brutalpusher.vercel.app">
     
     <style>
@@ -51,6 +50,7 @@
             --primary-dark: #7c3aed;
             --danger: #ef4444;
             --success: #10b981;
+            --warning: #f59e0b;
             --dark: #1f2937;
             --darker: #111827;
             --light: #f3f4f6;
@@ -220,7 +220,7 @@
             overflow: hidden;
         }
 
-        button:hover {
+        button:hover:not(:disabled) {
             background: var(--primary-dark);
             transform: translateY(-2px);
             box-shadow: 0 10px 20px rgba(139, 92, 246, 0.4);
@@ -228,6 +228,12 @@
 
         button:active {
             transform: translateY(0);
+        }
+
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .ripple {
@@ -354,7 +360,7 @@
             background: rgba(0, 0, 0, 0.3);
             border-radius: 10px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 1rem;
         }
 
@@ -374,11 +380,11 @@
             margin-top: 0.25rem;
         }
 
-        /* Procrastination level */
-        .procrastination-level {
+        /* Current momentum display */
+        .momentum-display {
             margin-top: 2rem;
             padding: 1rem;
-            background: linear-gradient(90deg, var(--danger), var(--primary));
+            background: linear-gradient(90deg, var(--danger), var(--warning), var(--success));
             border-radius: 10px;
             text-align: center;
             animation: glow 2s ease-in-out infinite;
@@ -389,13 +395,13 @@
             50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.8); }
         }
 
-        .level-title {
+        .momentum-title {
             font-size: 0.9rem;
             opacity: 0.9;
             margin-bottom: 0.5rem;
         }
 
-        .level-value {
+        .momentum-value {
             font-size: 1.5rem;
             font-weight: bold;
         }
@@ -479,6 +485,36 @@
             color: #fca5a5;
             font-style: italic;
             animation: fadeIn 0.5s;
+            min-height: 1.2rem;
+        }
+
+        /* AI Loading State */
+        .ai-loading {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+        }
+
+        .loading-dots {
+            display: inline-flex;
+            gap: 2px;
+        }
+
+        .loading-dots span {
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: loadingDots 1.4s infinite ease-in-out;
+        }
+
+        .loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes loadingDots {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
         }
     </style>
 </head>
@@ -490,7 +526,7 @@
         <!-- Header -->
         <div class="header">
             <h1>BRUTAL PUSHER</h1>
-            <p class="tagline">Your friend who won't let you BS yourself</p>
+            <p class="tagline">Your AI friend who won't let you BS yourself</p>
         </div>
 
         <!-- Mood indicator -->
@@ -540,27 +576,23 @@
             <!-- Stats section -->
             <div class="stats-section">
                 <div class="stat-item">
-                    <div class="stat-value" id="tasksAvoided">0</div>
-                    <div class="stat-label">Tasks Avoided</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="excusesMade">0</div>
-                    <div class="stat-label">Excuses Made</div>
-                </div>
-                <div class="stat-item">
                     <div class="stat-value" id="tasksCompleted">0</div>
-                    <div class="stat-label">Actually Done</div>
+                    <div class="stat-label">Tasks Completed</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-value" id="currentStreak">0</div>
-                    <div class="stat-label">Day Streak</div>
+                    <div class="stat-value" id="actionsTaken">0</div>
+                    <div class="stat-label">Actions Taken</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="currentMomentum">0%</div>
+                    <div class="stat-label">Current Momentum</div>
                 </div>
             </div>
 
-            <!-- Procrastination level -->
-            <div class="procrastination-level">
-                <div class="level-title">Current Procrastination Level</div>
-                <div class="level-value" id="procLevel">Professional Time Waster</div>
+            <!-- Current momentum display -->
+            <div class="momentum-display">
+                <div class="momentum-title">Productivity Status</div>
+                <div class="momentum-value" id="momentumStatus">Getting Started</div>
             </div>
         </div>
     </div>
@@ -569,42 +601,63 @@
     <div class="toast" id="toast"></div>
 
     <script>
-        // Initialize stats from localStorage
+        // Initialize stats with new simplified tracking
         let stats = {
-            tasksAvoided: parseInt(localStorage.getItem('tasksAvoided') || 0),
-            excusesMade: parseInt(localStorage.getItem('excusesMade') || 0),
             tasksCompleted: parseInt(localStorage.getItem('tasksCompleted') || 0),
-            currentStreak: parseInt(localStorage.getItem('currentStreak') || 0),
-            lastVisit: localStorage.getItem('lastVisit') || null
+            actionsTaken: parseInt(localStorage.getItem('actionsTaken') || 0),
+            sessionStartTime: Date.now(),
+            recentActivity: JSON.parse(localStorage.getItem('recentActivity') || '[]')
         };
+
+        // Calculate current momentum based on recent activity
+        function calculateMomentum() {
+            const now = Date.now();
+            const oneHour = 60 * 60 * 1000;
+            const recentActions = stats.recentActivity.filter(time => now - time < oneHour);
+            
+            // Clean old activity
+            stats.recentActivity = recentActions;
+            localStorage.setItem('recentActivity', JSON.stringify(stats.recentActivity));
+            
+            // Calculate momentum percentage (0-100%)
+            const momentum = Math.min(100, recentActions.length * 20);
+            return momentum;
+        }
+
+        // Update momentum status text
+        function getMomentumStatus(momentum) {
+            if (momentum === 0) return "Getting Started";
+            if (momentum < 20) return "Warming Up";
+            if (momentum < 40) return "Building Steam";
+            if (momentum < 60) return "On Fire! 🔥";
+            if (momentum < 80) return "Unstoppable Force";
+            return "Productivity Beast! 🚀";
+        }
 
         // Update stats display
         function updateStats() {
-            document.getElementById('tasksAvoided').textContent = stats.tasksAvoided;
-            document.getElementById('excusesMade').textContent = stats.excusesMade;
+            const momentum = calculateMomentum();
+            
             document.getElementById('tasksCompleted').textContent = stats.tasksCompleted;
-            document.getElementById('currentStreak').textContent = stats.currentStreak;
+            document.getElementById('actionsTaken').textContent = stats.actionsTaken;
+            document.getElementById('currentMomentum').textContent = momentum + '%';
+            document.getElementById('momentumStatus').textContent = getMomentumStatus(momentum);
             
             // Save to localStorage
-            Object.keys(stats).forEach(key => {
-                localStorage.setItem(key, stats[key]);
-            });
-            
-            updateProcrastinationLevel();
+            localStorage.setItem('tasksCompleted', stats.tasksCompleted);
+            localStorage.setItem('actionsTaken', stats.actionsTaken);
         }
 
-        // Calculate procrastination level
-        function updateProcrastinationLevel() {
-            const ratio = stats.tasksAvoided / Math.max(1, stats.tasksCompleted);
-            let level = "Productivity Unicorn";
+        // Add activity tracking
+        function trackActivity(type = 'action') {
+            stats.actionsTaken++;
+            stats.recentActivity.push(Date.now());
             
-            if (ratio > 10) level = "Legendary Procrastinator";
-            else if (ratio > 5) level = "Professional Time Waster";
-            else if (ratio > 3) level = "Chronic Avoider";
-            else if (ratio > 1) level = "Part-time Slacker";
-            else if (ratio > 0.5) level = "Occasional Dodger";
+            // Keep only recent activity (last 24 hours)
+            const oneDayAgo = Date.now() - (24 * 60 * 60 * 1000);
+            stats.recentActivity = stats.recentActivity.filter(time => time > oneDayAgo);
             
-            document.getElementById('procLevel').textContent = level;
+            updateStats();
         }
 
         // Mood messages based on time of day
@@ -645,144 +698,119 @@
             document.getElementById('moodText').textContent = randomMood;
         }
 
-        // Brutal responses
-        const brutalResponses = [
-            "Oh wow, another task to avoid. Your consistency in procrastination is truly impressive.",
-            "Let me add this to your ever-growing list of things you'll never actually do.",
-            "Sure, let's pretend you'll actually follow through this time. I'll play along.",
-            "I'm breaking this down for you, but we both know you'll find a way to avoid it anyway.",
-            "Alright, let's turn this mountain into molehills so you can ignore smaller things.",
-            "Breaking news: Local procrastinator discovers new task to postpone indefinitely.",
-            "I've seen glaciers move faster than your productivity. But sure, let's try again.",
-            "Adding this to your collection of 'I'll definitely do this tomorrow' tasks.",
-            "Your future self is already disappointed, but let's break this down anyway.",
-            "Oh good, more ammunition for your guilt at 3 AM. Let's do this!"
-        ];
+        // AI functions using your existing Gemini API
+        async function callAI(prompt, type = 'task') {
+            try {
+                const response = await fetch('/api/ai', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json' 
+                    },
+                    body: JSON.stringify({ 
+                        text: prompt,
+                        type: type,
+                        context: {
+                            timeOfDay: new Date().getHours(),
+                            momentum: calculateMomentum(),
+                            stats: stats
+                        }
+                    })
+                });
 
-        // Task breakdown templates
-        function generateTaskBreakdown(task) {
-            const breakdowns = {
-                default: [
-                    { task: "Open your laptop/phone", snark: "Yes, this counts as a step for you" },
-                    { task: "Stare at the task for 30 seconds", snark: "Building that psychological readiness, sure" },
-                    { task: "Do literally ANYTHING related to it", snark: "The bar is on the floor here" },
-                    { task: "Do 10% of the actual work", snark: "Baby steps for baby procrastinators" },
-                    { task: "Take a break you don't deserve", snark: "Because you definitely earned it" },
-                    { task: "Do another 20%", snark: "Look at you, practically employee of the month" },
-                    { task: "Panic and rush the rest", snark: "Your signature move, I presume" }
-                ],
-                study: [
-                    { task: "Find your study materials", snark: "Check under the pile of excuses" },
-                    { task: "Open the book/notes", snark: "Revolutionary concept, I know" },
-                    { task: "Read ONE page", snark: "Just one. We're setting the bar underground here" },
-                    { task: "Take notes on that page", snark: "Pretend you're a functional student" },
-                    { task: "Read 5 more pages", snark: "Without checking your phone challenge (impossible)" },
-                    { task: "Quiz yourself", snark: "Spoiler: you'll fail, but try anyway" },
-                    { task: "Review what you forgot", snark: "So... everything?" }
-                ],
-                exercise: [
-                    { task: "Put on workout clothes", snark: "The hardest part for you, apparently" },
-                    { task: "Stand up", snark: "Congratulations on fighting gravity" },
-                    { task: "Walk to the gym/workout area", snark: "Or walk back to the couch, your choice" },
-                    { task: "Do 5 minutes of anything", snark: "Even stretching counts for you" },
-                    { task: "Try 10 more minutes", snark: "Your muscles are as lazy as your brain" },
-                    { task: "Push through 10 final minutes", snark: "Channel that midnight productivity energy" },
-                    { task: "Shower", snark: "Please. For everyone's sake" }
-                ],
-                work: [
-                    { task: "Open your work computer", snark: "Without opening social media challenge" },
-                    { task: "Check emails", snark: "The ones from last week too" },
-                    { task: "Pick the easiest task", snark: "Start with kindergarten difficulty" },
-                    { task: "Actually START that task", snark: "Not just think about starting" },
-                    { task: "Work for 15 minutes straight", snark: "Your phone won't die without you" },
-                    { task: "Complete one small thing", snark: "Anything. The bar is subterranean" },
-                    { task: "Pretend to be productive", snark: "You're already good at this part" }
-                ],
-                write: [
-                    { task: "Open a document", snark: "Blank pages can't hurt you... much" },
-                    { task: "Write the title", snark: "That's like 1% done already!" },
-                    { task: "Write ONE sentence", snark: "Even 'I don't know what to write' counts" },
-                    { task: "Write a paragraph", snark: "Quality optional at this point" },
-                    { task: "Write for 10 minutes non-stop", snark: "Word vomit is still progress" },
-                    { task: "Edit what you wrote", snark: "Make it slightly less terrible" },
-                    { task: "Write one more paragraph", snark: "You're basically Shakespeare now" }
-                ],
-                clean: [
-                    { task: "Stand up and survey the disaster", snark: "Admitting the problem is step one" },
-                    { task: "Pick up 5 things", snark: "Just 5. We're not aiming for miracles" },
-                    { task: "Put those things where they belong", snark: "Not just in a different pile" },
-                    { task: "Clear one surface", snark: "You remember what your desk looks like?" },
-                    { task: "Take out trash", snark: "It's been there for weeks, hasn't it?" },
-                    { task: "Do one load of laundry", snark: "Your clothes are becoming sentient" },
-                    { task: "Vacuum/sweep one room", snark: "The dust bunnies have formed a civilization" }
-                ]
-            };
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
 
-            // Detect task type
-            const taskLower = task.toLowerCase();
-            let selectedBreakdown = breakdowns.default;
-            
-            if (taskLower.includes('study') || taskLower.includes('learn') || taskLower.includes('exam') || taskLower.includes('homework')) {
-                selectedBreakdown = breakdowns.study;
-            } else if (taskLower.includes('gym') || taskLower.includes('exercise') || taskLower.includes('workout') || taskLower.includes('run')) {
-                selectedBreakdown = breakdowns.exercise;
-            } else if (taskLower.includes('work') || taskLower.includes('job') || taskLower.includes('project') || taskLower.includes('meeting')) {
-                selectedBreakdown = breakdowns.work;
-            } else if (taskLower.includes('write') || taskLower.includes('essay') || taskLower.includes('blog') || taskLower.includes('article')) {
-                selectedBreakdown = breakdowns.write;
-            } else if (taskLower.includes('clean') || taskLower.includes('organize') || taskLower.includes('tidy')) {
-                selectedBreakdown = breakdowns.clean;
+                const data = await response.json();
+                return data.response || data.text || data.message || data.data;
+            } catch (error) {
+                console.error('AI API Error:', error);
+                showToast('AI is having a moment. Using backup responses...');
+                return getFallbackResponse(prompt, type);
             }
-            
-            return selectedBreakdown;
         }
 
-        // Excuse destroyer
-        const excuseDestroyers = {
-            'tired': "Funny how you're never too tired to scroll through social media for 3 hours.",
-            'busy': "Busy? You spent 2 hours choosing what to watch on Netflix yesterday.",
-            'tomorrow': "Your 'tomorrow' has more sequels than Fast & Furious.",
-            'later': "Later? It's been 'later' for the past 3 months.",
-            'mood': "Waiting for the right mood? You'll be waiting till the heat death of the universe.",
-            'time': "No time? You literally just spent 30 minutes watching cat videos.",
-            'hard': "It's hard? So was getting out of bed but here you are... barely.",
-            'scared': "Scared? The only scary thing here is your productivity track record.",
-            'perfect': "Waiting for the perfect moment? Perfectionism is just procrastination in a suit.",
-            'know': "Don't know how? You figured out that complicated coffee order, didn't you?"
-        };
+        // Fallback responses when AI is not available
+        function getFallbackResponse(prompt, type) {
+            if (type === 'excuse') {
+                const fallbackExcuses = [
+                    "Oh wow, another classic excuse. How original.",
+                    "That's cute. Still procrastinating though.",
+                    "I've heard that one before. Do the thing anyway.",
+                    "Creative excuse! Zero points for execution.",
+                    "That excuse expired in 2019. Try again.",
+                    "Impressive mental gymnastics. Now do actual gymnastics... with the task.",
+                    "Your excuse game is strong. Your follow-through game? Not so much.",
+                    "Cool story. Still need to do the thing though."
+                ];
+                return fallbackExcuses[Math.floor(Math.random() * fallbackExcuses.length)];
+            } else {
+                const fallbackTasks = [
+                    "Oh wow, another task to avoid. Your consistency in procrastination is truly impressive.",
+                    "Let me add this to your ever-growing list of things you'll never actually do.",
+                    "Sure, let's pretend you'll actually follow through this time. I'll play along.",
+                    "I'm breaking this down for you, but we both know you'll find a way to avoid it anyway.",
+                    "Alright, let's turn this mountain into molehills so you can ignore smaller things.",
+                    "Another day, another task to postpone until the heat death of the universe.",
+                    "Your future self is already disappointed, but let's break this down anyway.",
+                    "Breaking news: Local procrastinator discovers new task to postpone indefinitely."
+                ];
+                return fallbackTasks[Math.floor(Math.random() * fallbackTasks.length)];
+            }
+        }
 
-        document.getElementById('excuseInput').addEventListener('input', function(e) {
-            const excuse = e.target.value.toLowerCase();
-            let destruction = "";
+        // Parse AI response for task breakdown
+        function parseAIResponse(response) {
+            const lines = response.split('\n').filter(line => line.trim());
+            const breakdown = [];
+            let roast = '';
             
-            for (let key in excuseDestroyers) {
-                if (excuse.includes(key)) {
-                    destruction = excuseDestroyers[key];
-                    break;
+            for (let line of lines) {
+                // Look for numbered steps
+                if (line.match(/^\d+[\.\)]\s*/)) {
+                    const taskText = line.replace(/^\d+[\.\)]\s*/, '').trim();
+                    breakdown.push({
+                        task: taskText,
+                        snark: "AI-powered procrastination destruction"
+                    });
+                }
+                // Look for bullet points
+                else if (line.match(/^[-\*]\s*/)) {
+                    const taskText = line.replace(/^[-\*]\s*/, '').trim();
+                    breakdown.push({
+                        task: taskText,
+                        snark: "Because apparently you need this spelled out"
+                    });
+                }
+                // Look for ROAST: prefix from your original format
+                else if (line.includes('ROAST:')) {
+                    roast = line.replace('ROAST:', '').trim();
+                }
+                // Capture the main roast (longer lines)
+                else if (line.length > 20 && !roast) {
+                    roast = line;
                 }
             }
             
-            if (!destruction && excuse.length > 3) {
-                const genericDestroyers = [
-                    "That's a new one! Still not valid though.",
-                    "Creative excuse! Still procrastination.",
-                    "I haven't heard that one before. Still not doing it though, are you?",
-                    "Interesting theory. Now do the thing.",
-                    "Cool story. Still need to do the task though."
-                ];
-                destruction = genericDestroyers[Math.floor(Math.random() * genericDestroyers.length)];
+            // If no structured steps found, create generic ones
+            if (breakdown.length === 0) {
+                breakdown.push(
+                    { task: "Start doing the thing you're avoiding", snark: "Revolutionary concept, I know" },
+                    { task: "Continue doing it for 5 minutes", snark: "Baby steps for baby procrastinators" },
+                    { task: "Take a break you don't deserve", snark: "Because you definitely earned it" },
+                    { task: "Do another 15 minutes", snark: "Look at you, practically functional" },
+                    { task: "Actually finish something", snark: "Shocking plot twist" }
+                );
             }
             
-            document.getElementById('excuseDestruction').textContent = destruction;
-            
-            if (excuse.length > 0) {
-                stats.excusesMade++;
-                updateStats();
-            }
-        });
+            return {
+                roast: roast || response.split('\n')[0] || response,
+                breakdown: breakdown.slice(0, 7) // Limit to 7 steps max
+            };
+        }
 
-        // Main function
-        function brutalPush() {
+        // Main function with AI integration
+        async function brutalPush() {
             const taskInput = document.getElementById('taskInput');
             const task = taskInput.value.trim();
             
@@ -791,32 +819,147 @@
                 return;
             }
             
-            // Update stats
-            stats.tasksAvoided++;
-            updateStats();
+            // Disable button and show loading
+            const pushButton = document.getElementById('pushButton');
+            pushButton.disabled = true;
+            pushButton.innerHTML = '<span class="ai-loading">AI is judging you<div class="loading-dots"><span></span><span></span><span></span></div></span>';
+            
+            // Track activity
+            trackActivity('task_start');
             
             // Show response section
             const responseSection = document.getElementById('responseSection');
             responseSection.style.display = 'block';
             responseSection.classList.add('active');
             
-            // Generate brutal response
-            const brutalText = document.getElementById('brutalText');
-            const randomResponse = brutalResponses[Math.floor(Math.random() * brutalResponses.length)];
-            typeWriter(brutalText, randomResponse);
-            
-            // Generate task breakdown
-            setTimeout(() => {
-                const breakdown = generateTaskBreakdown(task);
-                displayBreakdown(breakdown);
-            }, 1500);
-            
-            // Clear input
-            taskInput.value = '';
-            
-            // Add ripple effect to button
-            createRipple(event);
+            try {
+                // Create AI prompt for task analysis
+                const momentum = calculateMomentum();
+                const aiPrompt = `User wants to tackle this task: "${task}". Their current productivity momentum is ${momentum}%. 
+
+Give them a brutal but motivating response that includes:
+1. A sarcastic roast about procrastinating on this specific task (keep under 150 characters)
+2. Break it down into 5-7 simple, actionable steps
+
+Be funny and brutal but ultimately helpful. Format your response like:
+
+ROAST: [Your brutal roast here]
+
+1. First specific step
+2. Second specific step  
+3. Third specific step
+etc.
+
+Make the steps actionable and specific to their task. Be savage but supportive!`;
+
+                // Get AI response
+                const aiResponse = await callAI(aiPrompt, 'task');
+                const parsed = parseAIResponse(aiResponse);
+                
+                // Display brutal response
+                const brutalText = document.getElementById('brutalText');
+                typeWriter(brutalText, parsed.roast);
+                
+                // Generate task breakdown
+                setTimeout(() => {
+                    displayBreakdown(parsed.breakdown);
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showToast("Something went wrong. Using backup roasts...");
+                
+                // Fallback to original behavior
+                const brutalText = document.getElementById('brutalText');
+                const fallbackResponse = getFallbackResponse(task, 'task');
+                typeWriter(brutalText, fallbackResponse);
+                
+                setTimeout(() => {
+                    const breakdown = generateFallbackBreakdown(task);
+                    displayBreakdown(breakdown);
+                }, 1500);
+            } finally {
+                // Re-enable button
+                pushButton.disabled = false;
+                pushButton.innerHTML = 'Push Me';
+                taskInput.value = '';
+            }
         }
+
+        // Generate fallback task breakdown when AI fails
+        function generateFallbackBreakdown(task) {
+            const taskLower = task.toLowerCase();
+            
+            // Basic task categorization
+            if (taskLower.includes('study') || taskLower.includes('learn') || taskLower.includes('read')) {
+                return [
+                    { task: "Find your study materials", snark: "Under that pile of excuses" },
+                    { task: "Set a 25-minute timer", snark: "Pomodoro technique for procrastinators" },
+                    { task: "Read/study for the full timer", snark: "No phone checking allowed" },
+                    { task: "Take a 5-minute break", snark: "You earned this one... barely" },
+                    { task: "Do another 25-minute session", snark: "Building that attention span" }
+                ];
+            } else if (taskLower.includes('work') || taskLower.includes('project') || taskLower.includes('job')) {
+                return [
+                    { task: "Open your work tools", snark: "Yes, close Instagram first" },
+                    { task: "List what needs to be done", snark: "Revolutionary planning concept" },
+                    { task: "Pick the easiest task first", snark: "Baby steps for baby procrastinators" },
+                    { task: "Work for 15 minutes straight", snark: "Your attention span's current limit" },
+                    { task: "Check off what you completed", snark: "Dopamine hit incoming" }
+                ];
+            } else if (taskLower.includes('clean') || taskLower.includes('organize')) {
+                return [
+                    { task: "Put on energetic music", snark: "You'll need all the help you can get" },
+                    { task: "Pick up 10 things", snark: "Just 10, don't overwhelm yourself" },
+                    { task: "Put those things where they belong", snark: "Novel concept, I know" },
+                    { task: "Tackle one surface/area", snark: "Remember what clean looks like?" },
+                    { task: "Take a before/after photo", snark: "Evidence of your rare productivity" }
+                ];
+            } else {
+                return [
+                    { task: "Break the task into smaller pieces", snark: "Bite-sized for your tiny attention span" },
+                    { task: "Do just the first small piece", snark: "One step at a time, champion" },
+                    { task: "Take a short break", snark: "Because you probably need it" },
+                    { task: "Continue with the next piece", snark: "Look at you, building momentum" },
+                    { task: "Finish at least half today", snark: "50% is better than your usual 0%" }
+                ];
+            }
+        }
+
+        // AI-powered excuse destroyer with debouncing
+        let excuseTimeout;
+        document.getElementById('excuseInput').addEventListener('input', async function(e) {
+            const excuse = e.target.value.trim();
+            const destructionDiv = document.getElementById('excuseDestruction');
+            
+            if (!excuse) {
+                destructionDiv.textContent = '';
+                return;
+            }
+            
+            // Clear previous timeout
+            clearTimeout(excuseTimeout);
+            
+            // Show loading
+            destructionDiv.innerHTML = '<span class="ai-loading">Analyzing excuse<div class="loading-dots"><span></span><span></span><span></span></div></span>';
+            
+            // Debounce AI calls
+            excuseTimeout = setTimeout(async () => {
+                try {
+                    const momentum = calculateMomentum();
+                    const aiPrompt = `User made this excuse for procrastinating: "${excuse}". Their current momentum is ${momentum}%. Give them a funny, brutal one-liner that destroys their excuse but motivates them. Keep it under 120 characters and be witty but not mean-spirited. Just respond with the roast, nothing else.`;
+                    
+                    const aiResponse = await callAI(aiPrompt, 'excuse');
+                    destructionDiv.textContent = '💢 ' + aiResponse;
+                    
+                    trackActivity('excuse_destroyed');
+                    
+                } catch (error) {
+                    const fallback = getFallbackResponse(excuse, 'excuse');
+                    destructionDiv.textContent = '💢 ' + fallback;
+                }
+            }, 1200); // Wait 1.2 seconds after user stops typing
+        });
         
         // Typewriter effect
         function typeWriter(element, text, speed = 30) {
@@ -834,7 +977,7 @@
             type();
         }
         
-        // Display task breakdown
+        // Display task breakdown with animation
         function displayBreakdown(breakdown) {
             const container = document.getElementById('taskBreakdown');
             container.innerHTML = '<h3 class="breakdown-title">Your Pathetically Simple Action Plan:</h3>';
@@ -855,9 +998,10 @@
                         this.classList.toggle('completed');
                         if (this.classList.contains('completed')) {
                             stats.tasksCompleted++;
+                            trackActivity('step_completed');
                             showToast(getCompletionMessage());
                         } else {
-                            stats.tasksCompleted--;
+                            stats.tasksCompleted = Math.max(0, stats.tasksCompleted - 1);
                             showToast("Unchecking? Can't even commit to checking a box. Typical.");
                         }
                         updateStats();
@@ -880,7 +1024,10 @@
                 "Mark this day in history - you were productive!",
                 "I'm not crying, you're crying. You did it!",
                 "Wow, you're slightly less of a disaster today!",
-                "Breaking: Local procrastinator shows signs of life!"
+                "Breaking: Local procrastinator shows signs of life!",
+                "Achievement unlocked: Basic Human Functionality!",
+                "Your future self just breathed a sigh of relief.",
+                "Momentum building! Don't stop now, you beautiful disaster."
             ];
             return messages[Math.floor(Math.random() * messages.length)];
         }
@@ -893,10 +1040,10 @@
             
             setTimeout(() => {
                 toast.classList.remove('show');
-            }, 3000);
+            }, 3500);
         }
         
-        // Ripple effect
+        // Ripple effect for button
         function createRipple(event) {
             const button = event.currentTarget;
             const ripple = document.createElement('span');
@@ -925,200 +1072,135 @@
             }
         });
         
-        // Check streak
-        function checkStreak() {
-            const today = new Date().toDateString();
-            const lastVisit = stats.lastVisit;
-            
-            if (lastVisit) {
-                const lastDate = new Date(lastVisit);
-                const todayDate = new Date(today);
-                const diffTime = Math.abs(todayDate - lastDate);
-                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                
-                if (diffDays === 1) {
-                    stats.currentStreak++;
-                    showToast(`${stats.currentStreak} day streak! Still procrastinating though.`);
-                } else if (diffDays > 1) {
-                    stats.currentStreak = 1;
-                    showToast("Streak broken. Not surprised.");
-                }
-            } else {
-                stats.currentStreak = 1;
-            }
-            
-            stats.lastVisit = today;
-            updateStats();
-        }
-        
         // Background animation
         function createBackgroundAnimation() {
             const container = document.getElementById('bgAnimation');
-            const emojis = ['😴', '⏰', '📱', '💤', '🎮', '📺', '🍕', '☕'];
+            const emojis = ['😴', '⏰', '📱', '💤', '🎮', '📺', '🍕', '☕', '🚀', '💪', '⚡', '🔥'];
             
-            for (let i = 0; i < 10; i++) {
+            for (let i = 0; i < 12; i++) {
                 const floater = document.createElement('div');
                 floater.className = 'floating';
                 floater.textContent = emojis[Math.floor(Math.random() * emojis.length)];
                 floater.style.left = Math.random() * 100 + '%';
                 floater.style.animationDelay = Math.random() * 20 + 's';
-                floater.style.animationDuration = (20 + Math.random() * 10) + 's';
+                floater.style.animationDuration = (15 + Math.random() * 10) + 's';
                 container.appendChild(floater);
             }
         }
         
-        // Motivational notifications (ironically demotivational)
+        // Motivational notifications
         function scheduleNotifications() {
             const notifications = [
-                "Still procrastinating? Shocking.",
-                "Your tasks miss you. Just kidding, they don't care.",
-                "Another hour passed. Another hour wasted.",
-                "Your future self hates current you.",
-                "Productivity level: 404 not found.",
-                "Achievement unlocked: Professional time waster!"
+                "Still here? Your tasks are getting lonely.",
+                "Fun fact: Productivity feels better than scrolling.",
+                "Your future self is counting on current you.",
+                "Small action > big plan you never execute.",
+                "What would productive-you do right now?",
+                "Plot twist: You actually CAN do the thing.",
+                "Procrastination level: Professional. Time to level up?"
             ];
             
-            // Random notification every 30 minutes
+            // Random notification every 25-45 minutes
             setInterval(() => {
-                if (Math.random() > 0.7) { // 30% chance
+                if (Math.random() > 0.6) { // 40% chance
                     const msg = notifications[Math.floor(Math.random() * notifications.length)];
                     showToast(msg);
                 }
-            }, 1800000); // 30 minutes
+            }, (25 + Math.random() * 20) * 60 * 1000); // 25-45 minutes
         }
         
-        // Initialize
+        // Initialize everything when page loads
         document.addEventListener('DOMContentLoaded', function() {
             updateStats();
             updateMood();
-            checkStreak();
             createBackgroundAnimation();
             scheduleNotifications();
             
             // Update mood every hour
             setInterval(updateMood, 3600000);
             
-            // Easter egg: Konami code
+            // Update momentum display every 10 minutes
+            setInterval(updateStats, 600000);
+            
+            // Easter egg: Konami code for motivation boost
             let konamiCode = [];
-            const konamiPattern = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+            const konamiPattern = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA'];
             
             document.addEventListener('keydown', function(e) {
-                konamiCode.push(e.key);
+                konamiCode.push(e.code);
                 konamiCode = konamiCode.slice(-10);
                 
                 if (konamiCode.join(',') === konamiPattern.join(',')) {
                     document.body.style.animation = 'shake 0.5s';
-                    showToast("🎮 Procrastination level: OVER 9000!");
-                    stats.tasksCompleted += 10;
+                    showToast("🎮 CHEAT CODE ACTIVATED! +50 Momentum!");
+                    
+                    // Boost momentum temporarily
+                    for (let i = 0; i < 3; i++) {
+                        stats.recentActivity.push(Date.now() - i * 1000);
+                    }
                     updateStats();
+                    
+                    setTimeout(() => {
+                        document.body.style.animation = 'none';
+                    }, 500);
                 }
             });
+            
+            // Add button ripple effect
+            document.getElementById('pushButton').addEventListener('click', createRipple);
         });
         
-        // Service Worker for PWA (optional)
-        if ('serviceWorker' in navigator) {
-            // Register service worker for offline capability
-            // This would need a separate service-worker.js file
-        }
-        
-        // Add some personality with random events
+        // Random motivational events
         function randomEvents() {
             const events = [
                 () => {
-                    document.body.style.filter = 'hue-rotate(180deg)';
-                    setTimeout(() => {
-                        document.body.style.filter = 'none';
-                    }, 1000);
-                    showToast("Reality glitch or just your motivation failing?");
+                    const momentum = calculateMomentum();
+                    if (momentum > 60) {
+                        showToast("🔥 You're on fire! Keep that momentum going!");
+                    } else if (momentum === 0) {
+                        showToast("💤 Wake up, sleepyhead! Your productivity is hibernating.");
+                    }
                 },
                 () => {
-                    const moodText = document.getElementById('moodText');
-                    moodText.style.transform = 'rotate(360deg)';
-                    moodText.style.transition = 'transform 1s';
-                    setTimeout(() => {
-                        moodText.style.transform = 'none';
-                    }, 1000);
+                    if (stats.tasksCompleted > 0) {
+                        showToast(`🏆 You've completed ${stats.tasksCompleted} tasks! Your past self is proud.`);
+                    }
                 },
                 () => {
-                    showToast("Fun fact: You've procrastinated " + (stats.tasksAvoided * 3) + " hours total!");
+                    const encouragements = [
+                        "💡 Reminder: Done is better than perfect!",
+                        "⚡ 2 minutes of action beats 2 hours of planning.",
+                        "🎯 What's the smallest thing you could do right now?",
+                        "🚀 Progress, not perfection. You've got this!"
+                    ];
+                    const msg = encouragements[Math.floor(Math.random() * encouragements.length)];
+                    showToast(msg);
                 }
             ];
             
             // Trigger random event occasionally
             setTimeout(() => {
-                if (Math.random() > 0.9) {
+                if (Math.random() > 0.85) { // 15% chance
                     const event = events[Math.floor(Math.random() * events.length)];
                     event();
                 }
                 randomEvents(); // Reschedule
-            }, Math.random() * 60000 + 30000); // Random between 30s and 90s
+            }, Math.random() * 300000 + 180000); // Random between 3-8 minutes
         }
         
-        randomEvents();
+        // Start random events
+        setTimeout(randomEvents, 60000); // Start after 1 minute
+        
+        // Cleanup old localStorage data if needed
+        function cleanupOldData() {
+            // Remove old unused stats
+            localStorage.removeItem('tasksAvoided');
+            localStorage.removeItem('excusesMade');
+            localStorage.removeItem('currentStreak');
+            localStorage.removeItem('lastVisit');
+        }
+        
+        cleanupOldData();
     </script>
-    <!-- AI 助手区域 -->
-<div style="margin-top: 30px; padding: 20px; background: #222; border-radius: 10px;">
-  <h3 style="color: #ff4444;">🔥 AI BRUTAL COACH</h3>
-  
-  <input type="text" 
-         id="userInput" 
-         placeholder="What are you avoiding?" 
-         style="width: 100%; padding: 10px; background: #333; color: white; border: none; border-radius: 5px; margin: 10px 0;">
-  
-  <button onclick="askAI()" 
-          style="width: 100%; padding: 10px; background: #ff4444; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
-    GET PUSHED
-  </button>
-  
-  <div id="aiResponse" style="margin-top: 20px; color: white; display: none;">
-    <div id="roast" style="font-size: 18px; color: #ff6666; margin-bottom: 15px;"></div>
-    <div id="steps" style="line-height: 1.8;"></div>
-  </div>
-</div>
-
-<script>
-async function askAI() {
-  const input = document.getElementById('userInput').value;
-  if (!input) return;
-  
-  const responseDiv = document.getElementById('aiResponse');
-  const roastDiv = document.getElementById('roast');
-  const stepsDiv = document.getElementById('steps');
-  
-  responseDiv.style.display = 'block';
-  roastDiv.textContent = 'Loading...';
-  stepsDiv.textContent = '';
-  
-  try {
-    const response = await fetch('/api/ai', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: input })
-    });
-    
-    const data = await response.json();
-    const text = data.response;
-    
-    // 解析 AI 回复
-    const lines = text.split('\n');
-    let roast = '';
-    let steps = [];
-    
-    lines.forEach(line => {
-      if (line.includes('ROAST:')) {
-        roast = line.replace('ROAST:', '').trim();
-      } else if (line.trim().match(/^\d\./)) {
-        steps.push(line.trim());
-      }
-    });
-    
-    roastDiv.textContent = '💢 ' + roast;
-    stepsDiv.innerHTML = steps.map(s => `<div>✓ ${s}</div>`).join('');
-    
-  } catch (error) {
-    roastDiv.textContent = 'Error: ' + error.message;
-  }
-}
-</script>
 </body>
 </html>
