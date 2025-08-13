@@ -1,15 +1,13 @@
 {
-  "name": "Brutal Pusher",
-  "short_name": "BrutalPusher", 
+  "name": "Brutal Pusher - Stop Procrastinating NOW",
+  "short_name": "Brutal Pusher",
+  "description": "Your savage AI friend who actually makes you get shit done",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#1f2937",
   "theme_color": "#8b5cf6",
-  "icons": [
-    {
-      "src": "/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    }
-  ]
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["productivity", "lifestyle", "utilities"]
 }
