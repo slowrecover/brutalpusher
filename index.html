@@ -270,62 +270,158 @@
             "I'll do it later"
         ];
 
+        // Debug function
+        function debug(message) {
+            console.log('🔍 Debug:', message);
+        }
+
         // Initialize the app
         document.addEventListener('DOMContentLoaded', function() {
+            debug('App initialized');
             populateExcuses();
             setupEventListeners();
+            debug('Setup complete');
         });
 
         function populateExcuses() {
+            debug('Populating excuses');
             const excuseGrid = document.getElementById('excuseGrid');
+            if (!excuseGrid) {
+                console.error('❌ excuseGrid not found!');
+                return;
+            }
+            
+            excuseGrid.innerHTML = ''; // Clear existing content
+            
             commonExcuses.forEach(excuse => {
                 const button = document.createElement('button');
                 button.className = 'p-3 text-left border-2 border-gray-200 rounded-lg hover:border-orange-500 hover:bg-orange-50 transition-colors';
                 button.textContent = excuse;
-                button.onclick = () => selectExcuse(excuse);
+                button.onclick = () => {
+                    debug('Excuse selected: ' + excuse);
+                    selectExcuse(excuse);
+                };
                 excuseGrid.appendChild(button);
             });
+            debug('Excuses populated: ' + commonExcuses.length);
         }
 
         function setupEventListeners() {
+            debug('Setting up event listeners');
+            
             // Task form
-            document.getElementById('taskForm').addEventListener('submit', handleTaskSubmit);
+            const taskForm = document.getElementById('taskForm');
+            if (taskForm) {
+                taskForm.addEventListener('submit', function(e) {
+                    debug('Task form submitted');
+                    handleTaskSubmit(e);
+                });
+            } else {
+                console.error('❌ taskForm not found!');
+            }
             
             // Custom excuse form
-            document.getElementById('customExcuseForm').addEventListener('submit', handleCustomExcuse);
+            const customExcuseForm = document.getElementById('customExcuseForm');
+            if (customExcuseForm) {
+                customExcuseForm.addEventListener('submit', function(e) {
+                    debug('Custom excuse form submitted');
+                    handleCustomExcuse(e);
+                });
+            } else {
+                console.error('❌ customExcuseForm not found!');
+            }
             
             // Start working button
-            document.getElementById('startWorkingBtn').addEventListener('click', startProgress);
+            const startWorkingBtn = document.getElementById('startWorkingBtn');
+            if (startWorkingBtn) {
+                startWorkingBtn.addEventListener('click', function() {
+                    debug('Start working button clicked');
+                    startProgress();
+                });
+            } else {
+                console.error('❌ startWorkingBtn not found!');
+            }
             
             // Progress controls
-            document.getElementById('pauseBtn').addEventListener('click', toggleTimer);
-            document.getElementById('restartBtn').addEventListener('click', restartApp);
+            const pauseBtn = document.getElementById('pauseBtn');
+            if (pauseBtn) {
+                pauseBtn.addEventListener('click', function() {
+                    debug('Pause button clicked');
+                    toggleTimer();
+                });
+            } else {
+                console.error('❌ pauseBtn not found!');
+            }
+            
+            const restartBtn = document.getElementById('restartBtn');
+            if (restartBtn) {
+                restartBtn.addEventListener('click', function() {
+                    debug('Restart button clicked');
+                    restartApp();
+                });
+            } else {
+                console.error('❌ restartBtn not found!');
+            }
+            
+            debug('Event listeners setup complete');
         }
 
         function handleTaskSubmit(e) {
             e.preventDefault();
-            const task = document.getElementById('taskInput').value.trim();
+            debug('Handling task submit');
+            
+            const taskInput = document.getElementById('taskInput');
+            if (!taskInput) {
+                console.error('❌ taskInput not found!');
+                return;
+            }
+            
+            const task = taskInput.value.trim();
+            debug('Task entered: ' + task);
+            
             if (task) {
                 taskData.task = task;
+                debug('Moving to excuse step');
                 showStep('excuse');
+            } else {
+                debug('No task entered');
+                alert('Come on, you lazy potato! Enter something! 🥔');
             }
         }
 
         function selectExcuse(excuse) {
+            debug('Excuse selected: ' + excuse);
             taskData.excuse = excuse;
             generateMotivation();
         }
 
         function handleCustomExcuse(e) {
             e.preventDefault();
-            const excuse = document.getElementById('customExcuseInput').value.trim();
+            debug('Handling custom excuse');
+            
+            const customExcuseInput = document.getElementById('customExcuseInput');
+            if (!customExcuseInput) {
+                console.error('❌ customExcuseInput not found!');
+                return;
+            }
+            
+            const excuse = customExcuseInput.value.trim();
+            debug('Custom excuse entered: ' + excuse);
+            
             if (excuse) {
                 taskData.excuse = excuse;
                 generateMotivation();
+            } else {
+                debug('No custom excuse entered');
+                alert('Really? You can\'t even come up with a good excuse? 😂');
             }
         }
 
         function generateMotivation() {
+            debug('Generating motivation');
+            debug('Task: ' + taskData.task);
+            debug('Excuse: ' + taskData.excuse);
+            
             // Generate brutal motivation based on task and excuse
             const motivations = [
                 `Listen here, you magnificent procrastinator! "${taskData.excuse}"? That's the lamest excuse I've ever heard! Your ${taskData.task} isn't going to do itself, you lazy potato! 🥔`,
@@ -335,9 +431,11 @@
             ];
             
             taskData.motivation = motivations[Math.floor(Math.random() * motivations.length)];
+            debug('Motivation generated: ' + taskData.motivation);
             
             // Generate task breakdown
             taskData.breakdown = generateBreakdown(taskData.task);
+            debug('Breakdown generated: ' + taskData.breakdown.length + ' steps');
             
             showStep('motivation');
             displayMotivation();
@@ -345,6 +443,8 @@
         }
 
         function generateBreakdown(task) {
+            debug('Generating breakdown for: ' + task);
+            
             const breakdowns = {
                 'study': ['Clear your desk and remove distractions', 'Open your textbook and read one chapter', 'Take notes on key points', 'Review and summarize what you learned'],
                 'work': ['Check your email and prioritize tasks', 'Start with the most important task', 'Take short breaks every 25 minutes', 'Review your progress and adjust'],
@@ -356,11 +456,13 @@
             // Try to match task with predefined breakdowns
             for (let key in breakdowns) {
                 if (task.toLowerCase().includes(key)) {
+                    debug('Found matching breakdown for: ' + key);
                     return breakdowns[key];
                 }
             }
             
             // Default breakdown
+            debug('Using default breakdown');
             return [
                 'Break down your task into smaller parts',
                 'Start with the easiest step first',
@@ -371,12 +473,25 @@
         }
 
         function displayMotivation() {
+            debug('Displaying motivation');
             const motivationText = document.getElementById('motivationText');
+            if (!motivationText) {
+                console.error('❌ motivationText not found!');
+                return;
+            }
+            
             motivationText.innerHTML = `<p class="text-lg font-semibold text-red-600 leading-relaxed">${taskData.motivation}</p>`;
+            debug('Motivation displayed');
         }
 
         function displayBreakdown() {
+            debug('Displaying breakdown');
             const breakdownList = document.getElementById('breakdownList');
+            if (!breakdownList) {
+                console.error('❌ breakdownList not found!');
+                return;
+            }
+            
             breakdownList.innerHTML = '';
             
             taskData.breakdown.forEach((step, index) => {
@@ -390,15 +505,18 @@
                 `;
                 breakdownList.appendChild(stepDiv);
             });
+            debug('Breakdown displayed: ' + taskData.breakdown.length + ' steps');
         }
 
         function startProgress() {
+            debug('Starting progress');
             showStep('progress');
             startTimer();
             displayProgressSteps();
         }
 
         function startTimer() {
+            debug('Starting timer');
             timer = setInterval(() => {
                 if (isTimerRunning) {
                     timeElapsed++;
@@ -412,33 +530,50 @@
             const minutes = Math.floor((timeElapsed % 3600) / 60);
             const seconds = timeElapsed % 60;
             
-            document.getElementById('timer').textContent = 
-                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            const timerElement = document.getElementById('timer');
+            if (timerElement) {
+                timerElement.textContent = 
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
         }
 
         function toggleTimer() {
             isTimerRunning = !isTimerRunning;
             const pauseBtn = document.getElementById('pauseBtn');
-            pauseBtn.innerHTML = isTimerRunning ? '⏸️ Pause' : '▶️ Resume';
+            if (pauseBtn) {
+                pauseBtn.innerHTML = isTimerRunning ? '⏸️ Pause' : '▶️ Resume';
+            }
+            debug('Timer toggled: ' + (isTimerRunning ? 'running' : 'paused'));
         }
 
         function displayProgressSteps() {
+            debug('Displaying progress steps');
             const progressSteps = document.getElementById('progressSteps');
+            if (!progressSteps) {
+                console.error('❌ progressSteps not found!');
+                return;
+            }
+            
             progressSteps.innerHTML = '';
             
             taskData.breakdown.forEach((step, index) => {
                 const stepDiv = document.createElement('div');
                 stepDiv.className = 'step-item';
-                stepDiv.onclick = () => toggleStep(index);
+                stepDiv.onclick = () => {
+                    debug('Step clicked: ' + index);
+                    toggleStep(index);
+                };
                 stepDiv.innerHTML = `
                     <span class="text-gray-400 text-xl">✅</span>
                     <span>${step}</span>
                 `;
                 progressSteps.appendChild(stepDiv);
             });
+            debug('Progress steps displayed');
         }
 
         function toggleStep(index) {
+            debug('Toggling step: ' + index);
             const stepItems = document.querySelectorAll('.step-item');
             const stepItem = stepItems[index];
             
@@ -446,10 +581,12 @@
                 completedSteps = completedSteps.filter(i => i !== index);
                 stepItem.classList.remove('completed');
                 stepItem.querySelector('span').className = 'text-gray-400 text-xl';
+                debug('Step uncompleted: ' + index);
             } else {
                 completedSteps.push(index);
                 stepItem.classList.add('completed');
                 stepItem.querySelector('span').className = 'text-green-600 text-xl';
+                debug('Step completed: ' + index);
             }
             
             updateProgress();
@@ -457,11 +594,22 @@
 
         function updateProgress() {
             const progress = taskData.breakdown.length > 0 ? (completedSteps.length / taskData.breakdown.length) * 100 : 0;
-            document.getElementById('progressPercent').textContent = `${Math.round(progress)}%`;
-            document.getElementById('progressBar').style.width = `${progress}%`;
+            
+            const progressPercent = document.getElementById('progressPercent');
+            if (progressPercent) {
+                progressPercent.textContent = `${Math.round(progress)}%`;
+            }
+            
+            const progressBar = document.getElementById('progressBar');
+            if (progressBar) {
+                progressBar.style.width = `${progress}%`;
+            }
+            
+            debug('Progress updated: ' + Math.round(progress) + '%');
         }
 
         function restartApp() {
+            debug('Restarting app');
             if (timer) {
                 clearInterval(timer);
             }
@@ -474,26 +622,52 @@
             completedSteps = [];
             
             // Reset UI
-            document.getElementById('taskInput').value = '';
-            document.getElementById('customExcuseInput').value = '';
-            document.getElementById('timer').textContent = '00:00:00';
-            document.getElementById('progressPercent').textContent = '0%';
-            document.getElementById('progressBar').style.width = '0%';
+            const taskInput = document.getElementById('taskInput');
+            if (taskInput) taskInput.value = '';
+            
+            const customExcuseInput = document.getElementById('customExcuseInput');
+            if (customExcuseInput) customExcuseInput.value = '';
+            
+            const timerElement = document.getElementById('timer');
+            if (timerElement) timerElement.textContent = '00:00:00';
+            
+            const progressPercent = document.getElementById('progressPercent');
+            if (progressPercent) progressPercent.textContent = '0%';
+            
+            const progressBar = document.getElementById('progressBar');
+            if (progressBar) progressBar.style.width = '0%';
             
             showStep('task');
+            debug('App restarted');
         }
 
         function showStep(step) {
+            debug('Showing step: ' + step);
+            
             // Hide all steps
-            document.getElementById('taskStep').classList.add('hidden');
-            document.getElementById('excuseStep').classList.add('hidden');
-            document.getElementById('motivationStep').classList.add('hidden');
-            document.getElementById('progressStep').classList.add('hidden');
+            const steps = ['task', 'excuse', 'motivation', 'progress'];
+            steps.forEach(stepName => {
+                const stepElement = document.getElementById(stepName + 'Step');
+                if (stepElement) {
+                    stepElement.classList.add('hidden');
+                }
+            });
             
             // Show current step
-            document.getElementById(step + 'Step').classList.remove('hidden');
-            currentStep = step;
+            const currentStepElement = document.getElementById(step + 'Step');
+            if (currentStepElement) {
+                currentStepElement.classList.remove('hidden');
+                currentStep = step;
+                debug('Step shown: ' + step);
+            } else {
+                console.error('❌ Step element not found: ' + step + 'Step');
+            }
         }
+
+        // Add some helpful console messages
+        console.log('💀 Brutal Pusher loaded!');
+        console.log('🔍 Open browser console (F12) to see debug messages');
+        console.log('📱 This is a PWA - you can install it on your phone!');
     </script>
 </body>
 </html>
