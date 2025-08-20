@@ -13,6 +13,9 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- Google Generative AI -->
+    <script src="https://cdn.jsdelivr.net/npm/@google/generative-ai@0.2.1/dist/generative-ai.min.js"></script>
+    
     <!-- Custom Styles -->
     <style>
         .brutal-button {
@@ -57,6 +60,10 @@
         .step-item:hover {
             @apply bg-orange-100;
         }
+
+        .loading {
+            @apply animate-pulse;
+        }
     </style>
 </head>
 <body class="gradient-bg min-h-screen">
@@ -98,66 +105,30 @@
                     
                     <button
                         type="submit"
+                        id="submitBtn"
                         class="brutal-button w-full flex items-center justify-center gap-2"
                     >
-                        ⚡ Break it down, you procrastinator!
+                        <span id="submitText">⚡ Break it down, you procrastinator!</span>
+                        <span id="loadingText" class="hidden">🤖 AI is thinking...</span>
                     </button>
                 </form>
             </div>
 
-            <!-- Step 2: Excuse Input -->
-            <div id="excuseStep" class="brutal-card hidden">
-                <div class="text-center mb-6">
-                    <div class="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <span class="text-white text-2xl">❌</span>
-                    </div>
-                    <h2 class="text-2xl font-bold text-gray-800 mb-2">
-                        What's your excuse today?
-                    </h2>
-                    <p class="text-gray-600">
-                        Come on, tell me why you're being a lazy potato! 🥔
-                    </p>
-                </div>
-
-                <div class="space-y-4">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="excuseGrid">
-                        <!-- Excuses will be populated by JavaScript -->
-                    </div>
-
-                    <div class="border-t pt-4">
-                        <form id="customExcuseForm" class="space-y-3">
-                            <input
-                                type="text"
-                                id="customExcuseInput"
-                                placeholder="Or type your own pathetic excuse..."
-                                class="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-orange-500 focus:outline-none"
-                            />
-                            <button
-                                type="submit"
-                                class="brutal-button w-full flex items-center justify-center gap-2"
-                            >
-                                ➕ Submit your lame excuse!
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Step 3: Brutal Motivation -->
-            <div id="motivationStep" class="space-y-6 hidden">
+            <!-- Step 2: AI Generated Plan -->
+            <div id="planStep" class="space-y-6 hidden">
                 <div class="brutal-card">
                     <div class="text-center mb-4">
                         <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
                             <span class="text-white text-2xl">🔥</span>
                         </div>
                         <h2 class="text-2xl font-bold text-gray-800 mb-2">
-                            Your Brutal Motivation
+                            Your Brutal Action Plan
                         </h2>
                     </div>
                     
                     <div id="motivationText" class="bg-red-50 border-2 border-red-600 rounded-lg p-4 mb-4">
                         <p class="text-lg font-semibold text-red-600 leading-relaxed">
-                            Generating your brutal motivation...
+                            <!-- Motivation will be populated by AI -->
                         </p>
                     </div>
 
@@ -172,16 +143,16 @@
                 <div class="brutal-card">
                     <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                         <span class="text-orange-500">✅</span>
-                        Your Action Plan
+                        Your Custom Action Plan
                     </h3>
                     
                     <div id="breakdownList" class="space-y-3">
-                        <!-- Steps will be populated by JavaScript -->
+                        <!-- Steps will be populated by AI -->
                     </div>
                 </div>
             </div>
 
-            <!-- Step 4: Progress Tracker -->
+            <!-- Step 3: Progress Tracker -->
             <div id="progressStep" class="space-y-6 hidden">
                 <div class="brutal-card">
                     <div class="text-center mb-6">
@@ -249,7 +220,6 @@
         let currentStep = 'task';
         let taskData = {
             task: '',
-            excuse: '',
             breakdown: [],
             motivation: ''
         };
@@ -258,18 +228,9 @@
         let isTimerRunning = true;
         let completedSteps = [];
 
-        // Common excuses
-        const commonExcuses = [
-            "I'm too tired",
-            "I'll do it tomorrow",
-            "I don't know where to start",
-            "It's too hard",
-            "I'm not in the mood",
-            "I'm too busy",
-            "I need to check my phone first",
-            "I'll do it later"
-        ];
-
+        // Initialize Gemini AI
+        let genAI;
+        
         // Debug function
         function debug(message) {
             console.log('🔍 Debug:', message);
@@ -278,32 +239,25 @@
         // Initialize the app
         document.addEventListener('DOMContentLoaded', function() {
             debug('App initialized');
-            populateExcuses();
             setupEventListeners();
+            initializeAI();
             debug('Setup complete');
         });
 
-        function populateExcuses() {
-            debug('Populating excuses');
-            const excuseGrid = document.getElementById('excuseGrid');
-            if (!excuseGrid) {
-                console.error('❌ excuseGrid not found!');
-                return;
+        function initializeAI() {
+            try {
+                // Check if Gemini API key is available
+                const apiKey = prompt('Please enter your Gemini API key (or press Cancel to use demo mode):');
+                if (apiKey && apiKey.trim()) {
+                    genAI = window.generativeAI.GoogleGenerativeAI(apiKey);
+                    debug('Gemini AI initialized with API key');
+                } else {
+                    debug('Using demo mode - no API key provided');
+                }
+            } catch (error) {
+                console.error('Error initializing AI:', error);
+                debug('Using demo mode due to error');
             }
-            
-            excuseGrid.innerHTML = ''; // Clear existing content
-            
-            commonExcuses.forEach(excuse => {
-                const button = document.createElement('button');
-                button.className = 'p-3 text-left border-2 border-gray-200 rounded-lg hover:border-orange-500 hover:bg-orange-50 transition-colors';
-                button.textContent = excuse;
-                button.onclick = () => {
-                    debug('Excuse selected: ' + excuse);
-                    selectExcuse(excuse);
-                };
-                excuseGrid.appendChild(button);
-            });
-            debug('Excuses populated: ' + commonExcuses.length);
         }
 
         function setupEventListeners() {
@@ -318,17 +272,6 @@
                 });
             } else {
                 console.error('❌ taskForm not found!');
-            }
-            
-            // Custom excuse form
-            const customExcuseForm = document.getElementById('customExcuseForm');
-            if (customExcuseForm) {
-                customExcuseForm.addEventListener('submit', function(e) {
-                    debug('Custom excuse form submitted');
-                    handleCustomExcuse(e);
-                });
-            } else {
-                console.error('❌ customExcuseForm not found!');
             }
             
             // Start working button
@@ -381,95 +324,187 @@
             
             if (task) {
                 taskData.task = task;
-                debug('Moving to excuse step');
-                showStep('excuse');
+                showLoading(true);
+                generateAIPlan(task);
             } else {
                 debug('No task entered');
                 alert('Come on, you lazy potato! Enter something! 🥔');
             }
         }
 
-        function selectExcuse(excuse) {
-            debug('Excuse selected: ' + excuse);
-            taskData.excuse = excuse;
-            generateMotivation();
-        }
-
-        function handleCustomExcuse(e) {
-            e.preventDefault();
-            debug('Handling custom excuse');
+        function showLoading(show) {
+            const submitBtn = document.getElementById('submitBtn');
+            const submitText = document.getElementById('submitText');
+            const loadingText = document.getElementById('loadingText');
             
-            const customExcuseInput = document.getElementById('customExcuseInput');
-            if (!customExcuseInput) {
-                console.error('❌ customExcuseInput not found!');
-                return;
-            }
-            
-            const excuse = customExcuseInput.value.trim();
-            debug('Custom excuse entered: ' + excuse);
-            
-            if (excuse) {
-                taskData.excuse = excuse;
-                generateMotivation();
+            if (show) {
+                submitBtn.disabled = true;
+                submitText.classList.add('hidden');
+                loadingText.classList.remove('hidden');
+                submitBtn.classList.add('loading');
             } else {
-                debug('No custom excuse entered');
-                alert('Really? You can\'t even come up with a good excuse? 😂');
+                submitBtn.disabled = false;
+                submitText.classList.remove('hidden');
+                loadingText.classList.add('hidden');
+                submitBtn.classList.remove('loading');
             }
         }
 
-        function generateMotivation() {
-            debug('Generating motivation');
-            debug('Task: ' + taskData.task);
-            debug('Excuse: ' + taskData.excuse);
+        async function generateAIPlan(task) {
+            debug('Generating AI plan for: ' + task);
             
-            // Generate brutal motivation based on task and excuse
+            try {
+                if (genAI) {
+                    // Use real Gemini API
+                    await generateWithGemini(task);
+                } else {
+                    // Use demo mode
+                    generateDemoPlan(task);
+                }
+            } catch (error) {
+                console.error('Error generating plan:', error);
+                generateDemoPlan(task);
+            }
+        }
+
+        async function generateWithGemini(task) {
+            try {
+                const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+                
+                const prompt = `You are a brutal but humorous motivational coach. The user wants to accomplish: "${task}"
+
+Please provide:
+1. A brutal but funny motivational message (2-3 sentences, use emojis)
+2. A custom action plan with 4-6 specific, actionable steps
+
+Format your response as JSON:
+{
+  "motivation": "your motivational message here",
+  "steps": ["step 1", "step 2", "step 3", "step 4"]
+}
+
+Be specific to their task, not generic. Make the motivation brutal but humorous, not mean.`;
+
+                const result = await model.generateContent(prompt);
+                const response = await result.response;
+                const text = response.text();
+                
+                debug('AI Response: ' + text);
+                
+                // Try to parse JSON response
+                try {
+                    const parsed = JSON.parse(text);
+                    taskData.motivation = parsed.motivation;
+                    taskData.breakdown = parsed.steps;
+                } catch (parseError) {
+                    // If JSON parsing fails, extract from text
+                    extractFromText(text);
+                }
+                
+                showPlan();
+                
+            } catch (error) {
+                console.error('Gemini API error:', error);
+                generateDemoPlan(task);
+            }
+        }
+
+        function extractFromText(text) {
+            // Fallback: extract motivation and steps from text
+            const lines = text.split('\n').filter(line => line.trim());
+            
+            // First line is usually motivation
+            taskData.motivation = lines[0] || "Time to stop being a lazy potato and get things done! 💀";
+            
+            // Rest are steps
+            taskData.breakdown = lines.slice(1).filter(line => 
+                line.trim() && !line.includes('{') && !line.includes('}')
+            ).map(line => line.replace(/^\d+\.\s*/, '').trim());
+            
+            if (taskData.breakdown.length === 0) {
+                taskData.breakdown = generateDefaultSteps(taskData.task);
+            }
+        }
+
+        function generateDemoPlan(task) {
+            debug('Generating demo plan');
+            
+            // Generate brutal motivation
             const motivations = [
-                `Listen here, you magnificent procrastinator! "${taskData.excuse}"? That's the lamest excuse I've ever heard! Your ${taskData.task} isn't going to do itself, you lazy potato! 🥔`,
-                `Oh, you're "${taskData.excuse}"? Well, your goals don't care about your feelings! Stop being a professional excuse maker and start being a goal achiever! 💀`,
-                `"${taskData.excuse}"? Seriously? That's what you're going with? Your future self is already disappointed in you! Time to stop being a couch potato and start being a success potato! 🚀`,
-                `Excuse me, but "${taskData.excuse}" is not a valid reason to avoid ${taskData.task}! Your procrastination skills are impressive, but your achievement skills are non-existent! Time to change that! ⚡`
+                `Listen here, you magnificent procrastinator! Your ${task} isn't going to do itself! Stop being a professional excuse maker and start being a goal achiever! 💀`,
+                `Oh, you want to ${task}? Well, your future self is already disappointed in you! Time to stop being a couch potato and start being a success potato! 🚀`,
+                `Your ${task} is waiting for you, but you're too busy being lazy! Your procrastination skills are impressive, but your achievement skills are non-existent! Time to change that! ⚡`,
+                `Excuse me, but your ${task} doesn't care about your feelings! Stop making excuses and start making progress! Your goals are getting tired of waiting! 🥔`
             ];
             
             taskData.motivation = motivations[Math.floor(Math.random() * motivations.length)];
-            debug('Motivation generated: ' + taskData.motivation);
             
-            // Generate task breakdown
-            taskData.breakdown = generateBreakdown(taskData.task);
-            debug('Breakdown generated: ' + taskData.breakdown.length + ' steps');
+            // Generate custom steps based on task
+            taskData.breakdown = generateCustomSteps(task);
             
-            showStep('motivation');
-            displayMotivation();
-            displayBreakdown();
+            showPlan();
         }
 
-        function generateBreakdown(task) {
-            debug('Generating breakdown for: ' + task);
+        function generateCustomSteps(task) {
+            const taskLower = task.toLowerCase();
             
-            const breakdowns = {
-                'study': ['Clear your desk and remove distractions', 'Open your textbook and read one chapter', 'Take notes on key points', 'Review and summarize what you learned'],
-                'work': ['Check your email and prioritize tasks', 'Start with the most important task', 'Take short breaks every 25 minutes', 'Review your progress and adjust'],
-                'exercise': ['Put on your workout clothes', 'Do a 5-minute warm-up', 'Start with 10 minutes of cardio', 'Add strength training exercises'],
-                'clean': ['Pick up trash and put it in the bin', 'Put away items that are out of place', 'Wipe down surfaces with a cloth', 'Vacuum or sweep the floor'],
-                'write': ['Open a blank document', 'Write down your main ideas', 'Start with the first paragraph', 'Keep writing without editing']
-            };
-            
-            // Try to match task with predefined breakdowns
-            for (let key in breakdowns) {
-                if (task.toLowerCase().includes(key)) {
-                    debug('Found matching breakdown for: ' + key);
-                    return breakdowns[key];
-                }
+            if (taskLower.includes('study') || taskLower.includes('learn') || taskLower.includes('read')) {
+                return [
+                    'Clear your desk and remove all distractions',
+                    'Open your textbook and read one chapter',
+                    'Take notes on the key points',
+                    'Review and summarize what you learned',
+                    'Test yourself with practice questions'
+                ];
+            } else if (taskLower.includes('work') || taskLower.includes('project') || taskLower.includes('job')) {
+                return [
+                    'Check your email and prioritize tasks',
+                    'Start with the most important task first',
+                    'Set a timer for 25 minutes and focus',
+                    'Take a 5-minute break, then continue',
+                    'Review your progress and adjust'
+                ];
+            } else if (taskLower.includes('exercise') || taskLower.includes('workout') || taskLower.includes('gym')) {
+                return [
+                    'Put on your workout clothes',
+                    'Do a 5-minute warm-up',
+                    'Start with 10 minutes of cardio',
+                    'Add strength training exercises',
+                    'Cool down and stretch'
+                ];
+            } else if (taskLower.includes('clean') || taskLower.includes('organize') || taskLower.includes('tidy')) {
+                return [
+                    'Pick up trash and put it in the bin',
+                    'Put away items that are out of place',
+                    'Wipe down surfaces with a cloth',
+                    'Vacuum or sweep the floor',
+                    'Organize one drawer or shelf'
+                ];
+            } else if (taskLower.includes('write') || taskLower.includes('blog') || taskLower.includes('article')) {
+                return [
+                    'Open a blank document',
+                    'Write down your main ideas',
+                    'Start with the first paragraph',
+                    'Keep writing without editing',
+                    'Review and polish your work'
+                ];
+            } else {
+                return [
+                    'Break down your task into smaller parts',
+                    'Start with the easiest step first',
+                    'Set a timer for 25 minutes and focus',
+                    'Take a short break and continue',
+                    'Review your progress and celebrate small wins'
+                ];
             }
-            
-            // Default breakdown
-            debug('Using default breakdown');
-            return [
-                'Break down your task into smaller parts',
-                'Start with the easiest step first',
-                'Set a timer for 25 minutes and focus',
-                'Take a short break and continue',
-                'Review your progress and celebrate small wins'
-            ];
+        }
+
+        function showPlan() {
+            debug('Showing plan');
+            showLoading(false);
+            showStep('plan');
+            displayMotivation();
+            displayBreakdown();
         }
 
         function displayMotivation() {
@@ -616,7 +651,7 @@
             
             // Reset state
             currentStep = 'task';
-            taskData = { task: '', excuse: '', breakdown: [], motivation: '' };
+            taskData = { task: '', breakdown: [], motivation: '' };
             timeElapsed = 0;
             isTimerRunning = true;
             completedSteps = [];
@@ -624,9 +659,6 @@
             // Reset UI
             const taskInput = document.getElementById('taskInput');
             if (taskInput) taskInput.value = '';
-            
-            const customExcuseInput = document.getElementById('customExcuseInput');
-            if (customExcuseInput) customExcuseInput.value = '';
             
             const timerElement = document.getElementById('timer');
             if (timerElement) timerElement.textContent = '00:00:00';
@@ -645,7 +677,7 @@
             debug('Showing step: ' + step);
             
             // Hide all steps
-            const steps = ['task', 'excuse', 'motivation', 'progress'];
+            const steps = ['task', 'plan', 'progress'];
             steps.forEach(stepName => {
                 const stepElement = document.getElementById(stepName + 'Step');
                 if (stepElement) {
@@ -668,6 +700,7 @@
         console.log('💀 Brutal Pusher loaded!');
         console.log('🔍 Open browser console (F12) to see debug messages');
         console.log('📱 This is a PWA - you can install it on your phone!');
+        console.log('🤖 AI-powered task breakdown - enter your Gemini API key when prompted');
     </script>
 </body>
 </html>
