@@ -13,9 +13,6 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Google Generative AI -->
-    <script src="https://cdn.jsdelivr.net/npm/@google/generative-ai@0.2.1/dist/generative-ai.min.js"></script>
-    
     <!-- Custom Styles -->
     <style>
         .brutal-button {
@@ -50,19 +47,41 @@
         }
         
         .step-item {
-            @apply flex items-start gap-3 p-3 bg-orange-50 rounded-lg cursor-pointer transition-colors;
+            @apply flex items-start gap-3 p-3 bg-orange-50 rounded-lg cursor-pointer transition-all duration-200 hover:bg-orange-100 border-2 border-orange-200;
         }
         
         .step-item.completed {
-            @apply bg-green-50 border-2 border-green-200;
+            @apply bg-green-50 border-green-300 opacity-75;
         }
         
-        .step-item:hover {
-            @apply bg-orange-100;
+        .step-item.completed .step-text {
+            @apply line-through text-gray-500;
+        }
+        
+        .step-item.completed .step-number {
+            @apply bg-green-500;
         }
 
         .loading {
             @apply animate-pulse;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-up {
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
     </style>
 </head>
@@ -77,9 +96,9 @@
         </header>
 
         <!-- Main Content -->
-        <main class="max-w-2xl mx-auto">
-            <!-- Step 1: Task Input -->
-            <div id="taskStep" class="brutal-card">
+        <main class="max-w-3xl mx-auto space-y-6">
+            <!-- Task Input Section -->
+            <div class="brutal-card">
                 <div class="text-center mb-6">
                     <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
                         <span class="text-white text-2xl">🎯</span>
@@ -98,7 +117,7 @@
                             id="taskInput"
                             placeholder="I want to... (be specific, you lazy human!)"
                             class="w-full p-4 border-2 border-gray-300 rounded-lg focus:border-red-600 focus:outline-none resize-none"
-                            rows="4"
+                            rows="3"
                             required
                         ></textarea>
                     </div>
@@ -108,107 +127,84 @@
                         id="submitBtn"
                         class="brutal-button w-full flex items-center justify-center gap-2"
                     >
-                        <span id="submitText">⚡ Break it down, you procrastinator!</span>
+                        <span id="submitText">⚡ Generate my brutal plan!</span>
                         <span id="loadingText" class="hidden">🤖 AI is thinking...</span>
                     </button>
                 </form>
             </div>
 
-            <!-- Step 2: AI Generated Plan -->
-            <div id="planStep" class="space-y-6 hidden">
-                <div class="brutal-card">
-                    <div class="text-center mb-4">
-                        <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <span class="text-white text-2xl">🔥</span>
-                        </div>
-                        <h2 class="text-2xl font-bold text-gray-800 mb-2">
-                            Your Brutal Action Plan
-                        </h2>
+            <!-- Motivation Section -->
+            <div id="motivationSection" class="brutal-card hidden fade-in">
+                <div class="text-center mb-4">
+                    <div class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <span class="text-white text-xl">🔥</span>
                     </div>
-                    
-                    <div id="motivationText" class="bg-red-50 border-2 border-red-600 rounded-lg p-4 mb-4">
-                        <p class="text-lg font-semibold text-red-600 leading-relaxed">
-                            <!-- Motivation will be populated by AI -->
-                        </p>
-                    </div>
-
-                    <button
-                        id="startWorkingBtn"
-                        class="brutal-button w-full flex items-center justify-center gap-2"
-                    >
-                        ⏰ Start working, you lazy human!
-                    </button>
-                </div>
-
-                <div class="brutal-card">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                        <span class="text-orange-500">✅</span>
-                        Your Custom Action Plan
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">
+                        Your Brutal Motivation
                     </h3>
-                    
-                    <div id="breakdownList" class="space-y-3">
-                        <!-- Steps will be populated by AI -->
-                    </div>
+                </div>
+                
+                <div id="motivationText" class="bg-red-50 border-2 border-red-600 rounded-lg p-4">
+                    <p class="text-lg font-semibold text-red-600 leading-relaxed">
+                        <!-- Motivation will be populated by AI -->
+                    </p>
                 </div>
             </div>
 
-            <!-- Step 3: Progress Tracker -->
-            <div id="progressStep" class="space-y-6 hidden">
-                <div class="brutal-card">
-                    <div class="text-center mb-6">
-                        <div class="w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <span class="text-white text-2xl">🏆</span>
+            <!-- Progress Section -->
+            <div id="progressSection" class="brutal-card hidden fade-in">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-bold text-gray-800 flex items-center gap-2">
+                        <span class="text-yellow-500">🏆</span>
+                        Progress Tracker
+                    </h3>
+                    <div class="text-right">
+                        <div id="timer" class="text-2xl font-bold text-red-600">
+                            00:00:00
                         </div>
-                        <h2 class="text-2xl font-bold text-gray-800 mb-2">
-                            Progress Tracker
-                        </h2>
-                        <p class="text-gray-600">Don't stop now, you're doing great! 💪</p>
-                    </div>
-
-                    <div class="space-y-4">
-                        <div class="text-center">
-                            <div id="timer" class="text-3xl font-bold text-red-600 mb-2">
-                                00:00:00
-                            </div>
-                            <p class="text-gray-600">Time spent working</p>
-                        </div>
-
-                        <div class="space-y-2">
-                            <div class="flex justify-between text-sm">
-                                <span>Progress</span>
-                                <span id="progressPercent">0%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div 
-                                    id="progressBar"
-                                    class="bg-red-600 h-2 rounded-full transition-all duration-300"
-                                    style="width: 0%"
-                                ></div>
-                            </div>
-                        </div>
-
-                        <div class="flex gap-2">
-                            <button
-                                id="pauseBtn"
-                                class="flex-1 brutal-button"
-                            >
-                                ⏸️ Pause
-                            </button>
-                            <button
-                                id="restartBtn"
-                                class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
-                            >
-                                🔄 New Task
-                            </button>
-                        </div>
+                        <div class="text-sm text-gray-600">Time spent</div>
                     </div>
                 </div>
 
-                <div class="brutal-card">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4">Your Steps</h3>
-                    <div id="progressSteps" class="space-y-3">
-                        <!-- Progress steps will be populated by JavaScript -->
+                <div class="space-y-3 mb-4">
+                    <div class="flex justify-between text-sm">
+                        <span>Progress</span>
+                        <span id="progressPercent">0%</span>
                     </div>
+                    <div class="w-full bg-gray-200 rounded-full h-3">
+                        <div 
+                            id="progressBar"
+                            class="bg-red-600 h-3 rounded-full transition-all duration-300"
+                            style="width: 0%"
+                        ></div>
+                    </div>
+                </div>
+
+                <div class="flex gap-2">
+                    <button
+                        id="pauseBtn"
+                        class="flex-1 brutal-button"
+                    >
+                        ⏸️ Pause
+                    </button>
+                    <button
+                        id="restartBtn"
+                        class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+                    >
+                        🔄 New Task
+                    </button>
+                </div>
+            </div>
+
+            <!-- Steps Section -->
+            <div id="stepsSection" class="brutal-card hidden fade-in">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <span class="text-orange-500">✅</span>
+                    Your Action Plan
+                </h3>
+                
+                <div id="stepsList" class="space-y-3">
+                    <!-- Steps will be populated by AI -->
                 </div>
             </div>
         </main>
@@ -217,7 +213,6 @@
     <!-- JavaScript -->
     <script>
         // Global state
-        let currentStep = 'task';
         let taskData = {
             task: '',
             breakdown: [],
@@ -228,9 +223,6 @@
         let isTimerRunning = true;
         let completedSteps = [];
 
-        // Initialize Gemini AI
-        let genAI;
-        
         // Debug function
         function debug(message) {
             console.log('🔍 Debug:', message);
@@ -240,25 +232,8 @@
         document.addEventListener('DOMContentLoaded', function() {
             debug('App initialized');
             setupEventListeners();
-            initializeAI();
             debug('Setup complete');
         });
-
-        function initializeAI() {
-            try {
-                // Check if Gemini API key is available
-                const apiKey = prompt('Please enter your Gemini API key (or press Cancel to use demo mode):');
-                if (apiKey && apiKey.trim()) {
-                    genAI = window.generativeAI.GoogleGenerativeAI(apiKey);
-                    debug('Gemini AI initialized with API key');
-                } else {
-                    debug('Using demo mode - no API key provided');
-                }
-            } catch (error) {
-                console.error('Error initializing AI:', error);
-                debug('Using demo mode due to error');
-            }
-        }
 
         function setupEventListeners() {
             debug('Setting up event listeners');
@@ -272,17 +247,6 @@
                 });
             } else {
                 console.error('❌ taskForm not found!');
-            }
-            
-            // Start working button
-            const startWorkingBtn = document.getElementById('startWorkingBtn');
-            if (startWorkingBtn) {
-                startWorkingBtn.addEventListener('click', function() {
-                    debug('Start working button clicked');
-                    startProgress();
-                });
-            } else {
-                console.error('❌ startWorkingBtn not found!');
             }
             
             // Progress controls
@@ -354,80 +318,34 @@
             debug('Generating AI plan for: ' + task);
             
             try {
-                if (genAI) {
-                    // Use real Gemini API
-                    await generateWithGemini(task);
+                // Call our backend API (you'll need to set this up)
+                const response = await fetch('/api/generate-plan', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ task: task })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    taskData.motivation = data.motivation;
+                    taskData.breakdown = data.steps;
+                    debug('AI plan received');
                 } else {
-                    // Use demo mode
-                    generateDemoPlan(task);
+                    throw new Error('API call failed');
                 }
             } catch (error) {
-                console.error('Error generating plan:', error);
-                generateDemoPlan(task);
+                console.error('API error:', error);
+                debug('Using fallback plan');
+                generateFallbackPlan(task);
             }
+            
+            showPlan();
         }
 
-        async function generateWithGemini(task) {
-            try {
-                const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-                
-                const prompt = `You are a brutal but humorous motivational coach. The user wants to accomplish: "${task}"
-
-Please provide:
-1. A brutal but funny motivational message (2-3 sentences, use emojis)
-2. A custom action plan with 4-6 specific, actionable steps
-
-Format your response as JSON:
-{
-  "motivation": "your motivational message here",
-  "steps": ["step 1", "step 2", "step 3", "step 4"]
-}
-
-Be specific to their task, not generic. Make the motivation brutal but humorous, not mean.`;
-
-                const result = await model.generateContent(prompt);
-                const response = await result.response;
-                const text = response.text();
-                
-                debug('AI Response: ' + text);
-                
-                // Try to parse JSON response
-                try {
-                    const parsed = JSON.parse(text);
-                    taskData.motivation = parsed.motivation;
-                    taskData.breakdown = parsed.steps;
-                } catch (parseError) {
-                    // If JSON parsing fails, extract from text
-                    extractFromText(text);
-                }
-                
-                showPlan();
-                
-            } catch (error) {
-                console.error('Gemini API error:', error);
-                generateDemoPlan(task);
-            }
-        }
-
-        function extractFromText(text) {
-            // Fallback: extract motivation and steps from text
-            const lines = text.split('\n').filter(line => line.trim());
-            
-            // First line is usually motivation
-            taskData.motivation = lines[0] || "Time to stop being a lazy potato and get things done! 💀";
-            
-            // Rest are steps
-            taskData.breakdown = lines.slice(1).filter(line => 
-                line.trim() && !line.includes('{') && !line.includes('}')
-            ).map(line => line.replace(/^\d+\.\s*/, '').trim());
-            
-            if (taskData.breakdown.length === 0) {
-                taskData.breakdown = generateDefaultSteps(taskData.task);
-            }
-        }
-
-        function generateDemoPlan(task) {
-            debug('Generating demo plan');
+        function generateFallbackPlan(task) {
+            debug('Generating fallback plan');
             
             // Generate brutal motivation
             const motivations = [
@@ -441,8 +359,6 @@ Be specific to their task, not generic. Make the motivation brutal but humorous,
             
             // Generate custom steps based on task
             taskData.breakdown = generateCustomSteps(task);
-            
-            showPlan();
         }
 
         function generateCustomSteps(task) {
@@ -502,9 +418,22 @@ Be specific to their task, not generic. Make the motivation brutal but humorous,
         function showPlan() {
             debug('Showing plan');
             showLoading(false);
-            showStep('plan');
+            
+            // Show all sections
+            document.getElementById('motivationSection').classList.remove('hidden');
+            document.getElementById('progressSection').classList.remove('hidden');
+            document.getElementById('stepsSection').classList.remove('hidden');
+            
+            // Add fade-in animation
+            setTimeout(() => {
+                document.getElementById('motivationSection').classList.add('fade-in');
+                document.getElementById('progressSection').classList.add('fade-in');
+                document.getElementById('stepsSection').classList.add('fade-in');
+            }, 100);
+            
             displayMotivation();
-            displayBreakdown();
+            displaySteps();
+            startTimer();
         }
 
         function displayMotivation() {
@@ -519,35 +448,34 @@ Be specific to their task, not generic. Make the motivation brutal but humorous,
             debug('Motivation displayed');
         }
 
-        function displayBreakdown() {
-            debug('Displaying breakdown');
-            const breakdownList = document.getElementById('breakdownList');
-            if (!breakdownList) {
-                console.error('❌ breakdownList not found!');
+        function displaySteps() {
+            debug('Displaying steps');
+            const stepsList = document.getElementById('stepsList');
+            if (!stepsList) {
+                console.error('❌ stepsList not found!');
                 return;
             }
             
-            breakdownList.innerHTML = '';
+            stepsList.innerHTML = '';
             
             taskData.breakdown.forEach((step, index) => {
                 const stepDiv = document.createElement('div');
-                stepDiv.className = 'flex items-start gap-3 p-3 bg-orange-50 rounded-lg';
+                stepDiv.className = 'step-item slide-up';
+                stepDiv.style.animationDelay = `${index * 0.1}s`;
+                stepDiv.onclick = () => {
+                    debug('Step clicked: ' + index);
+                    toggleStep(index);
+                };
                 stepDiv.innerHTML = `
-                    <span class="bg-orange-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
+                    <span class="step-number bg-orange-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
                         ${index + 1}
                     </span>
-                    <p class="text-gray-700">${step}</p>
+                    <span class="step-text text-gray-700 flex-1">${step}</span>
+                    <span class="text-gray-400 text-xl">✅</span>
                 `;
-                breakdownList.appendChild(stepDiv);
+                stepsList.appendChild(stepDiv);
             });
-            debug('Breakdown displayed: ' + taskData.breakdown.length + ' steps');
-        }
-
-        function startProgress() {
-            debug('Starting progress');
-            showStep('progress');
-            startTimer();
-            displayProgressSteps();
+            debug('Steps displayed: ' + taskData.breakdown.length + ' steps');
         }
 
         function startTimer() {
@@ -581,32 +509,6 @@ Be specific to their task, not generic. Make the motivation brutal but humorous,
             debug('Timer toggled: ' + (isTimerRunning ? 'running' : 'paused'));
         }
 
-        function displayProgressSteps() {
-            debug('Displaying progress steps');
-            const progressSteps = document.getElementById('progressSteps');
-            if (!progressSteps) {
-                console.error('❌ progressSteps not found!');
-                return;
-            }
-            
-            progressSteps.innerHTML = '';
-            
-            taskData.breakdown.forEach((step, index) => {
-                const stepDiv = document.createElement('div');
-                stepDiv.className = 'step-item';
-                stepDiv.onclick = () => {
-                    debug('Step clicked: ' + index);
-                    toggleStep(index);
-                };
-                stepDiv.innerHTML = `
-                    <span class="text-gray-400 text-xl">✅</span>
-                    <span>${step}</span>
-                `;
-                progressSteps.appendChild(stepDiv);
-            });
-            debug('Progress steps displayed');
-        }
-
         function toggleStep(index) {
             debug('Toggling step: ' + index);
             const stepItems = document.querySelectorAll('.step-item');
@@ -615,12 +517,14 @@ Be specific to their task, not generic. Make the motivation brutal but humorous,
             if (completedSteps.includes(index)) {
                 completedSteps = completedSteps.filter(i => i !== index);
                 stepItem.classList.remove('completed');
-                stepItem.querySelector('span').className = 'text-gray-400 text-xl';
+                stepItem.querySelector('.step-number').className = 'step-number bg-orange-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold';
+                stepItem.querySelector('.step-text').className = 'step-text text-gray-700 flex-1';
                 debug('Step uncompleted: ' + index);
             } else {
                 completedSteps.push(index);
                 stepItem.classList.add('completed');
-                stepItem.querySelector('span').className = 'text-green-600 text-xl';
+                stepItem.querySelector('.step-number').className = 'step-number bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold';
+                stepItem.querySelector('.step-text').className = 'step-text text-gray-700 flex-1 line-through text-gray-500';
                 debug('Step completed: ' + index);
             }
             
@@ -650,7 +554,6 @@ Be specific to their task, not generic. Make the motivation brutal but humorous,
             }
             
             // Reset state
-            currentStep = 'task';
             taskData = { task: '', breakdown: [], motivation: '' };
             timeElapsed = 0;
             isTimerRunning = true;
@@ -669,38 +572,19 @@ Be specific to their task, not generic. Make the motivation brutal but humorous,
             const progressBar = document.getElementById('progressBar');
             if (progressBar) progressBar.style.width = '0%';
             
-            showStep('task');
+            // Hide sections
+            document.getElementById('motivationSection').classList.add('hidden');
+            document.getElementById('progressSection').classList.add('hidden');
+            document.getElementById('stepsSection').classList.add('hidden');
+            
             debug('App restarted');
-        }
-
-        function showStep(step) {
-            debug('Showing step: ' + step);
-            
-            // Hide all steps
-            const steps = ['task', 'plan', 'progress'];
-            steps.forEach(stepName => {
-                const stepElement = document.getElementById(stepName + 'Step');
-                if (stepElement) {
-                    stepElement.classList.add('hidden');
-                }
-            });
-            
-            // Show current step
-            const currentStepElement = document.getElementById(step + 'Step');
-            if (currentStepElement) {
-                currentStepElement.classList.remove('hidden');
-                currentStep = step;
-                debug('Step shown: ' + step);
-            } else {
-                console.error('❌ Step element not found: ' + step + 'Step');
-            }
         }
 
         // Add some helpful console messages
         console.log('💀 Brutal Pusher loaded!');
         console.log('🔍 Open browser console (F12) to see debug messages');
         console.log('📱 This is a PWA - you can install it on your phone!');
-        console.log('🤖 AI-powered task breakdown - enter your Gemini API key when prompted');
+        console.log('🤖 AI-powered task breakdown - integrated with backend API');
     </script>
 </body>
 </html>
