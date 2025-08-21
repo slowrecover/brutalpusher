@@ -24,6 +24,7 @@ export default function handler(req, res) {
     // Generate brutal plan
     const plan = generateBrutalPlan(taskName || 'unnamed task', duration || 25, difficulty || 'medium');
     
+    // 确保返回格式正确
     res.status(200).json({
       success: true,
       plan: plan,
