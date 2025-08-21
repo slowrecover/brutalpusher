@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.static('.'));
 
-// Initialize Gemini AI
+// Initialize Gemini AI - 从环境变量读取API密钥
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // Routes
