@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GET SHIT DONE</title>
+    <title>2 Minute Roast - Stop Procrastinating</title>
     <style>
         * {
             margin: 0;
@@ -11,166 +11,153 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary: #000000;
+            --secondary: #666666;
+            --background: #ffffff;
+            --accent: #0066ff;
+            --danger: #ff0000;
+            --success: #00c853;
+            --border: #e0e0e0;
+            --hover: #f5f5f5;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Arial', sans-serif;
-            background: #fff;
-            color: #000;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
+            background: var(--background);
+            color: var(--primary);
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            padding: 40px 20px;
+            padding: 20px;
             line-height: 1.6;
         }
 
         .container {
             width: 100%;
-            max-width: 500px;
+            max-width: 420px;
         }
 
-        h1 {
+        /* Landing Screen */
+        .landing-screen {
+            text-align: center;
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo {
             font-size: 2.5em;
             font-weight: 900;
-            margin-bottom: 10px;
             letter-spacing: -2px;
-        }
-
-        .tagline {
-            color: #666;
             margin-bottom: 40px;
-            font-size: 1.1em;
         }
 
         .input-section {
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
 
-        .input-group {
-            margin-bottom: 25px;
-        }
-
-        label {
-            display: block;
+        .question {
+            font-size: 1.8em;
             font-weight: 700;
-            margin-bottom: 8px;
-            font-size: 0.9em;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
         }
 
-        input, select {
+        .task-input {
             width: 100%;
-            padding: 12px;
-            font-size: 1em;
-            border: 3px solid #000;
-            background: #fff;
+            padding: 16px 20px;
+            font-size: 1.1em;
+            border: 2px solid var(--primary);
+            background: var(--background);
             font-family: inherit;
             transition: all 0.2s;
+            margin-bottom: 20px;
         }
 
-        input:focus, select:focus {
+        .task-input:focus {
             outline: none;
-            background: #f5f5f5;
-        }
-
-        .start-btn {
-            width: 100%;
-            padding: 18px;
-            font-size: 1.2em;
-            font-weight: 900;
-            background: #000;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.2s;
-        }
-
-        .start-btn:hover {
-            background: #333;
+            border-color: var(--accent);
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
-        .start-btn:active {
-            transform: translateY(0);
+        .task-input::placeholder {
+            color: var(--secondary);
+            font-style: italic;
         }
 
-        .task-section {
-            display: none;
-        }
-
-        .task-header {
-            border-bottom: 3px solid #000;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-        }
-
-        .task-title {
-            font-size: 1.2em;
+        .start-button {
+            background: var(--primary);
+            color: var(--background);
+            border: none;
+            padding: 16px 40px;
+            font-size: 1em;
             font-weight: 700;
-            margin-bottom: 15px;
-        }
-
-        .timer {
-            font-size: 2.5em;
-            font-weight: 900;
-            letter-spacing: -1px;
-            margin-bottom: 15px;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #eee;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: #000;
-            transition: width 1s linear;
-        }
-
-        .motivation {
-            font-size: 1.3em;
-            font-weight: 700;
-            margin: 30px 0;
-            padding: 20px;
-            background: #f5f5f5;
-            text-align: center;
-        }
-
-        .steps-list {
-            margin-bottom: 30px;
-        }
-
-        .step-item {
-            padding: 15px;
-            margin-bottom: 12px;
-            border: 2px solid #000;
+            letter-spacing: 0.5px;
             cursor: pointer;
             transition: all 0.2s;
+            text-transform: uppercase;
+        }
+
+        .start-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .start-button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .hint {
+            font-size: 0.85em;
+            color: var(--secondary);
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        /* Roast Screen */
+        .roast-screen {
+            display: none;
+            animation: slideIn 0.4s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .roast-message {
+            font-size: 1.4em;
             font-weight: 600;
-            background: #fff;
+            margin-bottom: 30px;
+            line-height: 1.4;
+            letter-spacing: -0.3px;
         }
 
-        .step-item:hover {
-            background: #f5f5f5;
-            transform: translateX(5px);
+        .roast-message.typing {
+            position: relative;
         }
 
-        .step-item.completed {
-            background: #000;
-            color: #fff;
-            text-decoration: line-through;
-            opacity: 0.6;
+        .roast-message.typing::after {
+            content: '|';
+            animation: blink 1s infinite;
         }
 
-        .step-number {
-            font-weight: 900;
-            margin-right: 10px;
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .challenge-text {
+            font-size: 1.1em;
+            color: var(--secondary);
+            margin-bottom: 30px;
         }
 
         .action-buttons {
@@ -178,456 +165,723 @@
             gap: 12px;
         }
 
-        .action-btn {
+        .action-button {
             flex: 1;
-            padding: 15px;
-            font-size: 1em;
-            font-weight: 700;
-            border: 3px solid #000;
-            background: #fff;
+            padding: 14px;
+            border: 2px solid var(--primary);
+            background: var(--background);
+            color: var(--primary);
+            font-weight: 600;
             cursor: pointer;
-            text-transform: uppercase;
+            transition: all 0.2s;
+            font-size: 0.95em;
+        }
+
+        .action-button.primary {
+            background: var(--primary);
+            color: var(--background);
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .action-button.scared {
+            border-color: var(--border);
+            color: var(--secondary);
+            font-size: 0.85em;
+        }
+
+        /* Work Screen */
+        .work-screen {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .timer-container {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .timer {
+            font-size: 4.5em;
+            font-weight: 200;
+            letter-spacing: -3px;
+            font-variant-numeric: tabular-nums;
+            margin-bottom: 10px;
+        }
+
+        .timer.warning {
+            color: var(--danger);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .motivation {
+            font-size: 1.15em;
+            font-weight: 500;
+            color: var(--secondary);
+            font-style: italic;
+            min-height: 30px;
+        }
+
+        .tasks-list {
+            margin-bottom: 30px;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            border: 2px solid var(--border);
+            cursor: pointer;
+            transition: all 0.2s;
+            background: var(--background);
+        }
+
+        .task-item:hover:not(.completed) {
+            border-color: var(--primary);
+            transform: translateX(4px);
+            background: var(--hover);
+        }
+
+        .task-item.completed {
+            opacity: 0.5;
+            text-decoration: line-through;
+            background: var(--hover);
+            border-color: var(--success);
+        }
+
+        .task-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary);
+            margin-right: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: all 0.2s;
         }
 
-        .action-btn:hover {
-            background: #000;
-            color: #fff;
+        .task-item.completed .task-checkbox {
+            background: var(--success);
+            border-color: var(--success);
         }
 
-        .complete-btn {
-            background: #000;
-            color: #fff;
+        .task-item.completed .task-checkbox::after {
+            content: '✓';
+            color: white;
+            font-weight: bold;
         }
 
-        .complete-btn:hover {
-            background: #333;
+        .task-text {
+            flex: 1;
+            font-size: 0.95em;
         }
 
-        .explosion {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 8em;
+        .control-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .control-button {
+            flex: 1;
+            padding: 14px;
+            border: 2px solid var(--primary);
+            background: var(--background);
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            font-size: 0.9em;
+        }
+
+        .control-button:hover {
+            background: var(--primary);
+            color: var(--background);
+        }
+
+        .control-button.done {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .control-button.quit {
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        .control-button.quit:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Complete Screen */
+        .complete-screen {
+            display: none;
+            text-align: center;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .complete-title {
+            font-size: 2.5em;
             font-weight: 900;
-            animation: explode 0.8s ease-out;
-            pointer-events: none;
-            z-index: 1000;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
         }
 
-        @keyframes explode {
-            0% {
-                transform: translate(-50%, -50%) scale(0) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(-50%, -50%) scale(2) rotate(10deg);
-                opacity: 0;
-            }
+        .complete-message {
+            font-size: 1.3em;
+            font-weight: 500;
+            color: var(--secondary);
+            margin-bottom: 30px;
+            line-height: 1.5;
         }
 
-        @media (max-width: 500px) {
-            h1 { font-size: 2em; }
-            .timer { font-size: 2em; }
-            .motivation { font-size: 1.1em; }
+        .stats {
+            background: var(--hover);
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 2px solid var(--border);
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+
+        .stat-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .stat-label {
+            color: var(--secondary);
+        }
+
+        .stat-value {
+            font-weight: 700;
+        }
+
+        .restart-button {
+            background: var(--primary);
+            color: var(--background);
+            border: none;
+            padding: 16px 40px;
+            font-size: 1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+
+        .restart-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .logo { font-size: 2em; }
+            .question { font-size: 1.5em; }
+            .timer { font-size: 3.5em; }
+            .roast-message { font-size: 1.2em; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>GET SHIT DONE</h1>
-        <div class="tagline">Stop thinking. Start doing.</div>
-
-        <div class="input-section" id="inputSection">
-            <div class="input-group">
-                <label>What are you avoiding?</label>
-                <input type="text" id="taskInput" placeholder="Write report, Clean room, Study..." maxlength="100">
+        <!-- Landing Screen -->
+        <div class="landing-screen" id="landingScreen">
+            <h1 class="logo">2 MINUTE ROAST</h1>
+            <div class="input-section">
+                <h2 class="question">What are you avoiding?</h2>
+                <input 
+                    type="text" 
+                    class="task-input" 
+                    id="taskInput" 
+                    placeholder="Writing thesis, going to gym, replying to emails..."
+                    maxlength="100"
+                    autocomplete="off"
+                >
+                <button class="start-button" id="startButton" onclick="startRoast()">
+                    Start →
+                </button>
+                <p class="hint">Be specific. The more detailed, the more I can hurt you.</p>
             </div>
-            <div class="input-group">
-                <label>How long?</label>
-                <select id="timeInput">
-                    <option value="5">5 minutes</option>
-                    <option value="10">10 minutes</option>
-                    <option value="15">15 minutes</option>
-                    <option value="20">20 minutes</option>
-                    <option value="25" selected>25 minutes</option>
-                    <option value="30">30 minutes</option>
-                    <option value="45">45 minutes</option>
-                    <option value="60">60 minutes</option>
-                </select>
-            </div>
-            <button class="start-btn" onclick="startTask()">
-                START NOW →
-            </button>
         </div>
 
-        <div class="task-section" id="taskSection">
-            <div class="task-header">
-                <div class="task-title" id="taskTitle"></div>
-                <div class="timer" id="timer">25:00</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressBar"></div>
+        <!-- Roast Screen -->
+        <div class="roast-screen" id="roastScreen">
+            <div class="roast-message" id="roastMessage"></div>
+            <p class="challenge-text">Here's the deal: just 2 minutes.<br>Even you can't fuck up 2 minutes.</p>
+            <div class="action-buttons">
+                <button class="action-button primary" onclick="startWork()">Let's Go</button>
+                <button class="action-button scared" onclick="backToStart()">I'm Scared</button>
+            </div>
+        </div>
+
+        <!-- Work Screen -->
+        <div class="work-screen" id="workScreen">
+            <div class="timer-container">
+                <div class="timer" id="timer">2:00</div>
+                <div class="motivation" id="motivation">Stop looking at the timer. Start working.</div>
+            </div>
+            <div class="tasks-list" id="tasksList"></div>
+            <div class="control-buttons">
+                <button class="control-button quit" onclick="giveUp()">Give Up</button>
+                <button class="control-button done" onclick="completeWork()">Done!</button>
+            </div>
+        </div>
+
+        <!-- Complete Screen -->
+        <div class="complete-screen" id="completeScreen">
+            <h2 class="complete-title" id="completeTitle">Holy Shit!</h2>
+            <p class="complete-message" id="completeMessage">You actually did it. 2 whole minutes of focus. Alert the media.</p>
+            <div class="stats">
+                <div class="stat-row">
+                    <span class="stat-label">Time worked:</span>
+                    <span class="stat-value" id="timeWorked">2:00</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Tasks completed:</span>
+                    <span class="stat-value" id="tasksCompleted">0/5</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Procrastination defeated:</span>
+                    <span class="stat-value">Temporarily</span>
                 </div>
             </div>
-            <div class="motivation" id="motivation">
-                LET'S FUCKING GO!
-            </div>
-            <div class="steps-list" id="stepsList"></div>
-            <div class="action-buttons">
-                <button class="action-btn" onclick="giveUp()">
-                    I QUIT
-                </button>
-                <button class="action-btn complete-btn" onclick="completeAll()">
-                    DONE!
-                </button>
-            </div>
+            <button class="restart-button" onclick="restart()">Go Again</button>
         </div>
     </div>
 
     <script>
-        let currentTask = '';
-        let totalMinutes = 25;
-        let totalSeconds = 0;
-        let remainingSeconds = 0;
-        let timerInterval = null;
-        let motivationInterval = null;
-        let steps = [];
-        let completedSteps = 0;
-
-        // 任务模式库 - 保持暴力幽默但更简洁
-        const taskPatterns = {
-            write: {
-                words: ['write', 'essay', 'report', 'article', 'blog', 'paper', 'email', 'document', 'proposal', 'letter'],
-                steps: [
-                    "Open the fucking document. NOW.",
-                    "Write ONE terrible sentence. Just one!",
-                    "Add three bullet points. They can suck.",
-                    "Turn bullets into paragraphs. Add words!",
-                    "Fix the worst parts. Make it readable.",
-                    "Send it. Stop overthinking!"
-                ]
-            },
-            study: {
-                words: ['study', 'learn', 'read', 'research', 'homework', 'exam', 'test', 'practice', 'review'],
-                steps: [
-                    "Open the book/website. Do it!",
-                    "Read ONE page. You can read, right?",
-                    "Write 3 notes. Even stupid ones count.",
-                    "Do ONE problem. The easy one is fine.",
-                    "Review what you wrote. Pretend you learned.",
-                    "Test yourself. Fail gloriously!"
-                ]
-            },
-            code: {
-                words: ['code', 'program', 'debug', 'develop', 'build', 'fix', 'app', 'website', 'software', 'script'],
-                steps: [
-                    "Open your editor. It won't bite.",
-                    "Write one function. Hello World counts.",
-                    "Make it do SOMETHING. Anything!",
-                    "Fix the errors. Google is your friend.",
-                    "Run it. Watch it crash beautifully.",
-                    "Commit it. 'It works' is a fine message."
-                ]
-            },
-            clean: {
-                words: ['clean', 'organize', 'tidy', 'wash', 'laundry', 'dishes', 'vacuum', 'dust'],
-                steps: [
-                    "Stand up. Yes, right now!",
-                    "Pick up 5 things. Just five!",
-                    "Throw away the obvious trash.",
-                    "Put things where they belong.",
-                    "Wipe ONE surface. Any surface!",
-                    "Done! It's less gross now!"
-                ]
-            },
-            exercise: {
-                words: ['workout', 'exercise', 'gym', 'run', 'fitness', 'yoga', 'stretch', 'walk', 'train'],
-                steps: [
-                    "Put your shoes on. Both of them.",
-                    "Start moving. Walking counts!",
-                    "Do 10 of something. Anything!",
-                    "Do 10 more. You won't die.",
-                    "Breathe. You're still alive!",
-                    "You did it! You're less weak!"
-                ]
-            },
-            work: {
-                words: ['meeting', 'presentation', 'slides', 'call', 'project', 'deadline', 'task', 'job'],
-                steps: [
-                    "Open the work thing. Whatever it is.",
-                    "Do the easiest part first.",
-                    "Now the annoying part. Power through!",
-                    "Make it look professional-ish.",
-                    "Check it once. Don't overthink!",
-                    "Send it. Done is better than perfect!"
-                ]
+        // Roast Database
+        const roastDatabase = {
+            patterns: {
+                thesis: {
+                    keywords: ['thesis', 'dissertation', 'research', 'paper', 'essay', 'assignment'],
+                    roasts: [
+                        "A thesis? How original. Let me guess... still on the introduction after 3 months?",
+                        "Your advisor has already given up hope. But sure, let's pretend you'll write today.",
+                        "Another thesis procrastinator. You're about as unique as your research topic.",
+                        "Still 'researching'? That's what you called scrolling Twitter yesterday too."
+                    ],
+                    tasks: [
+                        "Open that dusty document",
+                        "Write literally ONE sentence",
+                        "Add a single citation (Wikipedia counts at this point)",
+                        "Fix one paragraph (just one!)",
+                        "Save before your laptop gives up too"
+                    ],
+                    motivations: [
+                        "Stop checking the word count",
+                        "Your bibliography won't write itself",
+                        "Even shit writing beats no writing",
+                        "Your advisor is watching... probably"
+                    ]
+                },
+                gym: {
+                    keywords: ['gym', 'workout', 'exercise', 'fitness', 'running', 'yoga'],
+                    roasts: [
+                        "The gym? That expensive monthly donation to a building you never visit?",
+                        "Your gym membership is the most consistent workout - for your credit card.",
+                        "Going to the gym? The staff will need to check your ID, they forgot you exist.",
+                        "Let me guess, 'tomorrow' is your favorite gym day?"
+                    ],
+                    tasks: [
+                        "Put on workout clothes (yes, now)",
+                        "Do literally 5 pushups",
+                        "Touch your toes (or try)",
+                        "Do 10 jumping jacks",
+                        "Pretend you worked out"
+                    ],
+                    motivations: [
+                        "Your muscles are atrophying as we speak",
+                        "Even walking to the fridge counts",
+                        "Sweat or regret, choose one",
+                        "Your gym selfie folder is empty"
+                    ]
+                },
+                email: {
+                    keywords: ['email', 'message', 'reply', 'respond', 'slack', 'teams'],
+                    roasts: [
+                        "That email has been rotting for how long? They probably think you're dead.",
+                        "Ah yes, email anxiety. Very professional of you.",
+                        "Your inbox is where communication goes to die.",
+                        "Still 'drafting' that reply? It's been a week."
+                    ],
+                    tasks: [
+                        "Open your email (deep breath)",
+                        "Type 'Hi [Name],'",
+                        "Write the main point in one sentence",
+                        "Add necessary details (keep it short)",
+                        "Hit send before overthinking"
+                    ],
+                    motivations: [
+                        "They're judging your response time",
+                        "It's never as bad as you think",
+                        "Just send it, perfectionist",
+                        "Your draft folder is a graveyard"
+                    ]
+                },
+                study: {
+                    keywords: ['study', 'exam', 'test', 'homework', 'reading', 'lecture', 'notes'],
+                    roasts: [
+                        "Studying? The exam is tomorrow, isn't it? Classic.",
+                        "Your notes from 3 weeks ago are judging you.",
+                        "Khan Academy can't save you now.",
+                        "Another all-nighter incoming? Your brain cells are crying."
+                    ],
+                    tasks: [
+                        "Open your textbook/notes",
+                        "Read ONE page (or paragraph)",
+                        "Write 3 bullet points",
+                        "Do one practice problem",
+                        "Pretend you understand"
+                    ],
+                    motivations: [
+                        "Your future self is screaming",
+                        "C's get degrees, but you need to try",
+                        "YouTube won't teach you this",
+                        "The material isn't getting easier"
+                    ]
+                },
+                cleaning: {
+                    keywords: ['clean', 'tidy', 'organize', 'laundry', 'dishes', 'room'],
+                    roasts: [
+                        "Your room looks like a crime scene. The victim? Hygiene.",
+                        "Even bacteria practice social distancing in your space.",
+                        "Cleaning? Your mother would be so proud... if she could see the floor.",
+                        "That pile of clothes has developed consciousness."
+                    ],
+                    tasks: [
+                        "Pick up 5 things (any 5 things)",
+                        "Put trash in the trash can",
+                        "Move dirty dishes to the kitchen",
+                        "Clear one surface completely",
+                        "Spray something with Febreze"
+                    ],
+                    motivations: [
+                        "Guests could arrive any moment (they won't)",
+                        "Your depression nest needs air",
+                        "Even roaches have standards",
+                        "One clean corner is progress"
+                    ]
+                },
+                code: {
+                    keywords: ['code', 'coding', 'programming', 'debug', 'project', 'app', 'website'],
+                    roasts: [
+                        "Still stuck on that bug from last week? Stack Overflow can't save you.",
+                        "Your GitHub contribution graph is whiter than fresh snow.",
+                        "Another side project to abandon? Your repos graveyard is full.",
+                        "'It works on my machine' isn't a deployment strategy."
+                    ],
+                    tasks: [
+                        "Open your IDE (not Reddit)",
+                        "Write one function (console.log counts)",
+                        "Fix that one error you've been ignoring",
+                        "Comment your spaghetti code",
+                        "Git commit -m 'did stuff'"
+                    ],
+                    motivations: [
+                        "Your code won't write itself",
+                        "Debugging builds character",
+                        "Ship it, fix it later",
+                        "Your imposter syndrome is showing"
+                    ]
+                },
+                generic: {
+                    keywords: [],
+                    roasts: [
+                        "Oh great, another procrastinator. How refreshing.",
+                        "Let me guess, you'll 'start in 5 minutes'?",
+                        "Your task isn't going away. Unlike your motivation.",
+                        "Procrastination is your only consistent habit."
+                    ],
+                    tasks: [
+                        "Open whatever you need to open",
+                        "Do the easiest part first",
+                        "Make tiny progress",
+                        "Pretend you're being productive",
+                        "Just do something, anything"
+                    ],
+                    motivations: [
+                        "Tick tock, time's wasting",
+                        "You came here for a reason",
+                        "Action beats anxiety",
+                        "Stop thinking, start doing"
+                    ]
+                }
             }
         };
 
-        // 通用后备方案
-        const genericSteps = [
-            "Stop overthinking. Start NOW!",
-            "Do the first obvious thing.",
-            "Keep going. Build momentum!",
-            "Push through the hard part.",
-            "Almost there. Don't stop!",
-            "Finish it. You're stronger than you think!"
-        ];
+        // Global state
+        let currentTask = '';
+        let currentPattern = null;
+        let timerInterval = null;
+        let totalSeconds = 120; // 2 minutes
+        let remainingSeconds = 120;
+        let tasksCompletedCount = 0;
+        let startTime = null;
 
-        // 激励语句库 - 更简洁但依然暴力
-        const motivationalInsults = {
-            start: [
-                "STOP WASTING TIME! GO GO GO!",
-                "What are you waiting for? MOVE!",
-                "Less thinking, more doing!",
-                "Your future self is watching. Don't disappoint!",
-                "Let's fucking do this!",
-                "Time to stop being useless!"
-            ],
-            working: [
-                "Keep going! No stopping!",
-                "Focus! Instagram can wait!",
-                "Don't you dare stop now!",
-                "You're doing it! Keep moving!",
-                "Stay on target!",
-                "No distractions! FOCUS!",
-                "The clock is watching you!",
-                "Don't check your phone!",
-                "Almost there! PUSH!"
-            ],
-            halfway: [
-                "Halfway! Don't fuck it up now!",
-                "50% done! You might actually do this!",
-                "Keep pushing! You're not dead yet!",
-                "Half way! I'm almost impressed!"
-            ],
-            almost: [
-                "Final stretch! Give it everything!",
-                "So close! DON'T STOP!",
-                "Almost there! FINISH STRONG!",
-                "You've come too far to quit!"
-            ],
-            complete: [
-                "HOLY SHIT! YOU DID IT!",
-                "Look at you! Actually finishing something!",
-                "You beautiful bastard! You did it!",
-                "I'm proud of you! (Don't get used to it)",
-                "You're officially less useless!",
-                "BOOM! Now do it again tomorrow!"
-            ],
-            giveup: [
-                "Really? That's it?",
-                "I expected nothing and I'm still disappointed.",
-                "Weak. Come back when you're ready.",
-                "At least you tried. Sort of.",
-                "Tomorrow. Try again tomorrow."
-            ]
-        };
-
-        function getRandomItem(arr) {
-            return arr[Math.floor(Math.random() * arr.length)];
-        }
-
-        function analyzeTask(task) {
-            const taskLower = task.toLowerCase();
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            const input = document.getElementById('taskInput');
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && input.value.trim()) {
+                    startRoast();
+                }
+            });
             
-            for (const [key, pattern] of Object.entries(taskPatterns)) {
-                for (const word of pattern.words) {
-                    if (taskLower.includes(word)) {
-                        return pattern.steps;
-                    }
+            // Update button state based on input
+            input.addEventListener('input', (e) => {
+                const button = document.getElementById('startButton');
+                button.disabled = !e.target.value.trim();
+            });
+        });
+
+        // Find matching pattern for user input
+        function findPattern(input) {
+            const lowerInput = input.toLowerCase();
+            
+            for (const [key, pattern] of Object.entries(roastDatabase.patterns)) {
+                if (pattern.keywords.some(keyword => lowerInput.includes(keyword))) {
+                    return pattern;
                 }
             }
             
-            return genericSteps;
-        }
-
-        function startTask() {
-            const taskInput = document.getElementById('taskInput');
-            const timeInput = document.getElementById('timeInput');
-            
-            currentTask = taskInput.value.trim();
-            if (!currentTask) {
-                alert("Type something! What are you trying to do?");
-                return;
+            // Fallback patterns based on common words
+            if (lowerInput.includes('write') || lowerInput.includes('writing')) {
+                return roastDatabase.patterns.thesis;
+            }
+            if (lowerInput.includes('work')) {
+                return roastDatabase.patterns.email;
             }
             
-            totalMinutes = parseInt(timeInput.value);
-            totalSeconds = totalMinutes * 60;
-            remainingSeconds = totalSeconds;
-            
-            steps = analyzeTask(currentTask);
-            completedSteps = 0;
-            
-            document.getElementById('inputSection').style.display = 'none';
-            document.getElementById('taskSection').style.display = 'block';
-            
-            document.getElementById('taskTitle').textContent = currentTask.toUpperCase();
-            
-            createStepsList();
-            showMotivation('start');
-            startTimer();
-            startMotivationLoop();
-            
-            createExplosion('GO!');
+            return roastDatabase.patterns.generic;
         }
 
-        function createStepsList() {
-            const stepsList = document.getElementById('stepsList');
-            stepsList.innerHTML = '';
+        // Get random item from array
+        function getRandom(array) {
+            return array[Math.floor(Math.random() * array.length)];
+        }
+
+        // Typewriter effect
+        function typewriterEffect(element, text, callback) {
+            element.innerHTML = '';
+            element.classList.add('typing');
+            let index = 0;
             
-            steps.forEach((step, index) => {
-                const stepDiv = document.createElement('div');
-                stepDiv.className = 'step-item';
-                stepDiv.innerHTML = `
-                    <span class="step-number">${index + 1}.</span>
-                    <span class="step-text">${step}</span>
+            const typeInterval = setInterval(() => {
+                element.innerHTML = text.substring(0, index);
+                index++;
+                
+                if (index > text.length) {
+                    clearInterval(typeInterval);
+                    element.classList.remove('typing');
+                    if (callback) callback();
+                }
+            }, 30);
+        }
+
+        // Start the roast
+        function startRoast() {
+            const input = document.getElementById('taskInput');
+            currentTask = input.value.trim();
+            
+            if (!currentTask) return;
+            
+            // Find matching pattern
+            currentPattern = findPattern(currentTask);
+            
+            // Hide landing, show roast screen
+            document.getElementById('landingScreen').style.display = 'none';
+            document.getElementById('roastScreen').style.display = 'block';
+            
+            // Show roast with typewriter effect
+            const roastMessage = getRandom(currentPattern.roasts);
+            const roastElement = document.getElementById('roastMessage');
+            typewriterEffect(roastElement, roastMessage);
+        }
+
+        // Back to start
+        function backToStart() {
+            document.getElementById('roastScreen').style.display = 'none';
+            document.getElementById('landingScreen').style.display = 'block';
+        }
+
+        // Start working
+        function startWork() {
+            // Hide roast, show work screen
+            document.getElementById('roastScreen').style.display = 'none';
+            document.getElementById('workScreen').style.display = 'block';
+            
+            // Generate tasks
+            generateTasks();
+            
+            // Start timer
+            startTime = Date.now();
+            remainingSeconds = totalSeconds;
+            startTimer();
+        }
+
+        // Generate task list
+        function generateTasks() {
+            const tasksList = document.getElementById('tasksList');
+            tasksList.innerHTML = '';
+            
+            currentPattern.tasks.forEach((task, index) => {
+                const taskItem = document.createElement('div');
+                taskItem.className = 'task-item';
+                taskItem.onclick = () => toggleTask(taskItem, index);
+                
+                taskItem.innerHTML = `
+                    <div class="task-checkbox"></div>
+                    <div class="task-text">${task}</div>
                 `;
-                stepDiv.onclick = () => toggleStep(index);
-                stepsList.appendChild(stepDiv);
+                
+                tasksList.appendChild(taskItem);
             });
         }
 
-        function toggleStep(index) {
-            const stepItems = document.querySelectorAll('.step-item');
-            const stepItem = stepItems[index];
+        // Toggle task completion
+        function toggleTask(element, index) {
+            element.classList.toggle('completed');
             
-            if (stepItem.classList.contains('completed')) {
-                stepItem.classList.remove('completed');
-                completedSteps--;
-            } else {
-                stepItem.classList.add('completed');
-                completedSteps++;
-                
-                if (completedSteps === steps.length) {
-                    createExplosion('🔥');
-                    showMotivation('complete');
-                } else if (completedSteps === Math.floor(steps.length / 2)) {
-                    createExplosion('50%');
-                    showMotivation('halfway');
-                } else {
-                    const cheers = ['✓', '👊', '💪', '🔥'];
-                    createExplosion(getRandomItem(cheers));
-                }
+            const completed = document.querySelectorAll('.task-item.completed').length;
+            tasksCompletedCount = completed;
+            
+            // Update motivation based on progress
+            const motivation = document.getElementById('motivation');
+            if (completed === currentPattern.tasks.length) {
+                motivation.textContent = "All done? You're actually impressive.";
+            } else if (completed > 0) {
+                motivation.textContent = getRandom(currentPattern.motivations);
             }
         }
 
+        // Timer function
         function startTimer() {
             timerInterval = setInterval(() => {
                 remainingSeconds--;
                 
                 if (remainingSeconds <= 0) {
-                    completeTask();
+                    completeWork();
                     return;
                 }
                 
                 updateTimerDisplay();
-                updateProgressBar();
-                
-                const progress = ((totalSeconds - remainingSeconds) / totalSeconds) * 100;
-                if (Math.abs(progress - 50) < 0.5) {
-                    showMotivation('halfway');
-                } else if (progress > 75 && progress < 76) {
-                    showMotivation('almost');
-                }
+                updateMotivation();
             }, 1000);
         }
 
+        // Update timer display
         function updateTimerDisplay() {
             const minutes = Math.floor(remainingSeconds / 60);
             const seconds = remainingSeconds % 60;
-            document.getElementById('timer').textContent = 
-                `${minutes}:${seconds.toString().padStart(2, '0')}`;
-        }
-
-        function updateProgressBar() {
-            const progress = ((totalSeconds - remainingSeconds) / totalSeconds) * 100;
-            document.getElementById('progressBar').style.width = progress + '%';
-        }
-
-        function startMotivationLoop() {
-            motivationInterval = setInterval(() => {
-                showMotivation('working');
-            }, 30000);
-        }
-
-        function showMotivation(type) {
-            const motivationDiv = document.getElementById('motivation');
-            const messages = motivationalInsults[type] || motivationalInsults.working;
-            motivationDiv.textContent = getRandomItem(messages);
-        }
-
-        function createExplosion(text) {
-            const explosion = document.createElement('div');
-            explosion.className = 'explosion';
-            explosion.textContent = text;
-            document.body.appendChild(explosion);
-            setTimeout(() => explosion.remove(), 800);
-        }
-
-        function completeTask() {
-            clearInterval(timerInterval);
-            clearInterval(motivationInterval);
-            createExplosion('⏰');
-            showMotivation('complete');
+            const display = `${minutes}:${seconds.toString().padStart(2, '0')}`;
             
-            setTimeout(() => {
-                if (confirm("Time's up! Did you finish?")) {
-                    alert("LEGEND! You actually did it! Now go do another one!");
-                } else {
-                    alert("At least you tried! That's more than most people. Try again!");
-                }
-                resetTask();
-            }, 1000);
+            const timerElement = document.getElementById('timer');
+            timerElement.textContent = display;
+            
+            // Add warning class in last 10 seconds
+            if (remainingSeconds <= 10) {
+                timerElement.classList.add('warning');
+            }
         }
 
-        function completeAll() {
-            clearInterval(timerInterval);
-            clearInterval(motivationInterval);
+        // Update motivation based on time
+        function updateMotivation() {
+            const motivation = document.getElementById('motivation');
+            const progress = (totalSeconds - remainingSeconds) / totalSeconds;
             
-            document.querySelectorAll('.step-item').forEach(item => {
-                item.classList.add('completed');
-            });
-            
-            createExplosion('🎉');
-            showMotivation('complete');
-            
-            setTimeout(() => {
-                alert("YOU ABSOLUTE CHAMPION! You destroyed that task! What's next?");
-                resetTask();
-            }, 1000);
+            if (remainingSeconds === 90) {
+                motivation.textContent = "30 seconds in. You're basically a productivity guru.";
+            } else if (remainingSeconds === 60) {
+                motivation.textContent = "Halfway there. Don't celebrate yet.";
+            } else if (remainingSeconds === 30) {
+                motivation.textContent = "30 seconds left. You might actually make it.";
+            } else if (remainingSeconds === 10) {
+                motivation.textContent = "Final 10 seconds. Don't fuck it up now.";
+            }
         }
 
+        // Give up
         function giveUp() {
-            if (confirm("Really? You're giving up?")) {
+            if (confirm("Really? Giving up already? I expected nothing and I'm still disappointed.")) {
                 clearInterval(timerInterval);
-                clearInterval(motivationInterval);
-                createExplosion('😞');
-                showMotivation('giveup');
-                
-                setTimeout(() => {
-                    alert("Fine. Rest. Come back stronger tomorrow!");
-                    resetTask();
-                }, 1000);
+                showComplete(false);
+            }
+        }
+
+        // Complete work
+        function completeWork() {
+            clearInterval(timerInterval);
+            showComplete(true);
+        }
+
+        // Show complete screen
+        function showComplete(success) {
+            document.getElementById('workScreen').style.display = 'none';
+            document.getElementById('completeScreen').style.display = 'block';
+            
+            const timeWorked = totalSeconds - remainingSeconds;
+            const minutes = Math.floor(timeWorked / 60);
+            const seconds = timeWorked % 60;
+            
+            document.getElementById('timeWorked').textContent = 
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            document.getElementById('tasksCompleted').textContent = 
+                `${tasksCompletedCount}/${currentPattern.tasks.length}`;
+            
+            if (success) {
+                document.getElementById('completeTitle').textContent = "Holy Shit!";
+                document.getElementById('completeMessage').textContent = 
+                    "You actually did it. 2 whole minutes of focus. Your parents would be so proud.";
             } else {
-                createExplosion('💪');
-                showMotivation('working');
+                const quitterMessages = [
+                    "I knew it. 2 minutes was too much to ask.",
+                    "Add this to your long list of failures.",
+                    "At least you're consistent. Consistently weak.",
+                    "See you tomorrow for another failed attempt?"
+                ];
+                document.getElementById('completeTitle').textContent = "Pathetic.";
+                document.getElementById('completeMessage').textContent = getRandom(quitterMessages);
             }
         }
 
-        function resetTask() {
-            document.getElementById('inputSection').style.display = 'block';
-            document.getElementById('taskSection').style.display = 'none';
+        // Restart
+        function restart() {
+            // Reset state
+            currentTask = '';
+            currentPattern = null;
+            remainingSeconds = totalSeconds;
+            tasksCompletedCount = 0;
+            
+            // Reset UI
+            document.getElementById('completeScreen').style.display = 'none';
+            document.getElementById('landingScreen').style.display = 'block';
             document.getElementById('taskInput').value = '';
-            document.getElementById('timeInput').value = '25';
-        }
-
-        document.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && document.getElementById('inputSection').style.display !== 'none') {
-                startTask();
+            document.getElementById('timer').classList.remove('warning');
+            
+            // Clear timer if running
+            if (timerInterval) {
+                clearInterval(timerInterval);
             }
-        });
+        }
     </script>
 </body>
 </html>
