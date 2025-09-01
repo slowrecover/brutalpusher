@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Your Brain Chooses Scrolling Over Working - 2 Minute Roast</title>
+    <meta name="description" content="The neuroscience of procrastination. And why 2 minutes is all you need to beat it.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #000000;
+            --secondary: #666666;
+            --background: #ffffff;
+            --accent: #0066ff;
+            --border: #e0e0e0;
+            --hover: #f5f5f5;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
+            background: var(--background);
+            color: var(--primary);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .article-container {
+            max-width: 650px;
+            margin: 0 auto;
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Navigation */
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 60px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .nav-logo {
+            font-size: 1.2em;
+            font-weight: 900;
+            letter-spacing: -1px;
+            text-decoration: none;
+            color: var(--primary);
+        }
+
+        .nav-cta {
+            background: var(--primary);
+            color: var(--background);
+            padding: 10px 20px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            font-size: 0.85em;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        /* Article */
+        h1 {
+            font-size: 2.8em;
+            font-weight: 900;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .meta {
+            color: var(--secondary);
+            font-size: 0.9em;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .article-content {
+            font-size: 1.1em;
+            color: #333;
+        }
+
+        .article-content p {
+            margin-bottom: 24px;
+        }
+
+        .article-content h2 {
+            font-size: 1.8em;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin: 40px 0 20px 0;
+        }
+
+        .highlight {
+            font-weight: 700;
+            background: linear-gradient(to bottom, transparent 60%, #ffeb3b 60%);
+            padding: 0 2px;
+        }
+
+        /* CTA Boxes */
+        .cta-box {
+            background: var(--hover);
+            border: 2px solid var(--primary);
+            padding: 30px;
+            margin: 40px 0;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .cta-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+        .cta-box h3 {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .cta-box p {
+            color: var(--secondary);
+            margin-bottom: 20px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--background);
+            padding: 14px 30px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        /* Stats */
+        .stat-block {
+            background: var(--primary);
+            color: var(--background);
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3em;
+            font-weight: 200;
+            letter-spacing: -2px;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.8;
+        }
+
+        /* Bottom CTA */
+        .bottom-cta {
+            background: var(--primary);
+            color: var(--background);
+            padding: 40px;
+            margin: 60px -20px -20px -20px;
+            text-align: center;
+        }
+
+        .bottom-cta h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .bottom-cta p {
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .bottom-cta .cta-button {
+            background: var(--background);
+            color: var(--primary);
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 2em; }
+            .article-content { font-size: 1em; }
+            .stat-number { font-size: 2.5em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="article-container">
+        <!-- Navigation -->
+        <nav class="nav">
+            <a href="/" class="nav-logo">2 MINUTE ROAST</a>
+            <a href="/" class="nav-cta">Get Roasted →</a>
+        </nav>
+
+        <!-- Article -->
+        <article>
+            <h1>Why Your Brain Chooses Scrolling Over Working</h1>
+            <div class="meta">January 20, 2024 · 3 min read</div>
+
+            <div class="article-content">
+                <p><strong>Right now, you're reading this instead of working.</strong> And I know exactly why.</p>
+
+                <p>Your brain is a dopamine junkie. It wants the <span class="highlight">easiest hit possible</span>. And scrolling? That's cocaine compared to the slow burn of actual work.</p>
+
+                <h2>The Neuroscience of Being Lazy</h2>
+                
+                <p>Here's what's happening in your skull right now:</p>
+
+                <div class="stat-block">
+                    <div class="stat-number">2.5</div>
+                    <div class="stat-label">Seconds to Dopamine from Scrolling</div>
+                </div>
+
+                <div class="stat-block" style="background: var(--secondary);">
+                    <div class="stat-number">20+</div>
+                    <div class="stat-label">Minutes to Dopamine from Working</div>
+                </div>
+
+                <p>Your primitive brain doesn't give a shit about your deadlines. It sees two options: instant pleasure or delayed gratification. Guess which one wins?</p>
+
+                <p>Every time you choose scrolling, you're literally <span class="highlight">training your brain to be weaker</span>. The neural pathways for procrastination get stronger. The ones for focus? They atrophy like unused muscles.</p>
+
+                <!-- First CTA -->
+                <div class="cta-box">
+                    <h3>Tired of Losing to Your Own Brain?</h3>
+                    <p>Let me roast you into productivity. Just 2 minutes.</p>
+                    <a href="/" class="cta-button">Get Roasted Now →</a>
+                </div>
+
+                <h2>Why Traditional Methods Fail</h2>
+
+                <p><strong>Pomodoro Technique:</strong> 25 minutes? Your brain laughs and opens Instagram.</p>
+
+                <p><strong>To-Do Lists:</strong> Seeing 47 tasks doesn't motivate you. It paralyzes you.</p>
+
+                <p><strong>Motivational Quotes:</strong> "You got this!" No, you don't. That's why you're here.</p>
+
+                <p>These methods assume you have willpower. You don't. If you did, you wouldn't be reading an article about procrastination.</p>
+
+                <h2>The 2-Minute Hack</h2>
+
+                <p>MIT researchers found something interesting: <span class="highlight">Starting is 87% of the battle</span>.</p>
+
+                <p>Once you begin a task, your brain wants to complete it. It's called the Zeigarnik Effect. Unfinished tasks create cognitive tension. Your brain hates that.</p>
+
+                <p>But here's the problem: starting feels impossible when you're thinking about working for hours.</p>
+
+                <p>So we lie to your brain. <strong>"Just 2 minutes."</strong></p>
+
+                <p>Your brain agrees because 2 minutes is nothing. It's less than a YouTube video. Less than making coffee. It's so small your resistance doesn't even wake up.</p>
+
+                <h2>Why Roasting Works</h2>
+
+                <p>Positive motivation is bullshit. Your brain doesn't respond to "You can do it!" </p>
+
+                <p>But shame? Spite? <span class="highlight">Those are powerful.</span></p>
+
+                <p>When someone calls you out on your bullshit, something primal activates. You want to prove them wrong. Even if "them" is an AI.</p>
+
+                <p>We're hijacking your ego to defeat your laziness. Fighting fire with fire.</p>
+
+                <!-- Second CTA -->
+                <div class="cta-box">
+                    <h3>Ready to Weaponize Your Spite?</h3>
+                    <p>Stop reading about productivity. Start doing.</p>
+                    <a href="/" class="cta-button">Start Your 2 Minutes →</a>
+                </div>
+
+                <h2>The Truth Nobody Tells You</h2>
+
+                <p>You don't need more time management apps. You don't need another system. You don't need to "find your why."</p>
+
+                <p>You need to <strong>start</strong>. That's it.</p>
+
+                <p>2 minutes. That's all we're asking.</p>
+
+                <p>Because once you start, momentum takes over. The hardest part isn't the work. It's opening the laptop. It's picking up the pen. It's taking the first step.</p>
+
+                <p>After that? Your brain's natural completion bias kicks in.</p>
+
+                <p>But you have to start. And that's where we come in.</p>
+            </div>
+        </article>
+    </div>
+
+    <!-- Bottom CTA -->
+    <div class="bottom-cta">
+        <h2>Stop Reading. Start Doing.</h2>
+        <p>Your task is still waiting. It's been waiting this whole article.</p>
+        <a href="/" class="cta-button">Get Roasted Into Action →</a>
+    </div>
+</body>
+</html>
